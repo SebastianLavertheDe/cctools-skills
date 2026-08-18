@@ -1,0 +1,16 @@
+[project]
+name = "knowledge-wiki-compiler"
+version = "0.1.0"
+description = "Incremental Markdown knowledge wiki compiler for the mymind corpus."
+requires-python = ">=3.11"
+dependencies = [
+  "PyYAML>=6.0",
+  "requests>=2.32.0",
+]
+
+[tool.uv]
+package = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

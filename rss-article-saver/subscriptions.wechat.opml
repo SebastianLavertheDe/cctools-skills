@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opml version="2.0">
+    <head>
+        <title>WeChat Tech and AI Feeds</title>
+    </head>
+    <body>
+        <outline text="腾讯技术工程" title="腾讯技术工程" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/1e0ac39f8952b2e7f0807313cf2633d25078a171.xml"/>
+        <outline text="阿里技术" title="阿里技术" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/6535a444e9651fecae3383363be7589acdebe2b6.xml"/>
+        <outline text="小米技术" title="小米技术" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/8bbc1ba1d363e70cd42d1ce89fb9070cb075c3b3.xml"/>
+        <outline text="哔哩哔哩技术" title="哔哩哔哩技术" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/3a12ae4fde5bb74aab2fddc9f710a3c057eab82f.xml"/>
+        <outline text="阿里云开发者" title="阿里云开发者" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/39fc51b0b1316137e608c45da5dbbca4f9eb9538.xml"/>
+        <outline text="字节跳动技术团队" title="字节跳动技术团队" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/d3a9e4d6f125cc98d1691dbc30cd97fec7ae2d03.xml"/>
+        <outline text="ShowMeAI研究中心" title="ShowMeAI研究中心" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/854a592a3bac3c2574d092daf4628cf65dfd1858.xml"/>
+        <outline text="奇舞精选" title="奇舞精选" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/156a64fe3e95eebe4b85bf981d6ebb85441897bf.xml"/>
+        <outline text="京东技术" title="京东技术" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/fa0be550682410cc187c0d1eab1a0fc4e073b949.xml"/>
+        <outline text="硅谷科技评论" title="硅谷科技评论" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/4515ee058133ff68570ad586abdd81f54f2b6ee3.xml"/>
+        <outline text="得物技术" title="得物技术" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/1cde72c9129b1f79cbb150166e7fed9a7568ee10.xml"/>
+        <outline text="百度Geek说" title="百度Geek说" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/6cc437d76f9dc4f7c35011c72e471e33e7bdd384.xml"/>
+        <outline text="大淘宝技术" title="大淘宝技术" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/26fef2307bebc8673703f7e726982d8f56c9a219.xml"/>
+        <outline text="51CTO技术栈" title="51CTO技术栈" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/d1fabe6c569ffc44979075dde2f57c65e07c3045.xml"/>
+        <outline text="优设" title="优设" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/8fee9d33e883a769a59a5a3e27d249cf8567b55a.xml"/>
+        <outline text="前端充电宝" title="前端充电宝" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/efed19b684285ee14f88b3f234b350fba9376d7a.xml"/>
+        <outline text="稀土掘金技术社区" title="稀土掘金技术社区" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/33ecd2122ae788ea02dfcf1df857a54b9ae1338d.xml"/>
+        <outline text="腾讯云开发者" title="腾讯云开发者" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/6cec2c211479a5502896375860009782cf10c2ba.xml"/>
+        <outline text="体验进阶" title="体验进阶" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/083c360a74b36b2c33820a995d21cbf60c813c0a.xml"/>
+        <outline text="前端早读课" title="前端早读课" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/ce2456e157156d42259c1198f05a33e27b1ed959.xml"/>
+        <outline text="开源服务指南" title="开源服务指南" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/c125f09ef36fd6b6cb092c409e69a5bcc867d378.xml"/>
+        <outline text="超人的电话亭" title="超人的电话亭" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/4be15abcd5621887bb7c1e2efd2d1cd8c68a16f0.xml"/>
+        <outline text="Qunar技术沙龙" title="Qunar技术沙龙" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/84c072f8d34d1690f2783d7dda6013cf6d892b7f.xml"/>
+        <outline text="42章经" title="42章经" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/f6694726ced4ba3d7c7cd65c6edf2160c5978387.xml"/>
+        <outline text="随机小分队" title="随机小分队" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/115e814e7b12d373a55459cb2aea3223152f2af2.xml"/>
+        <outline text="阿里研究院" title="阿里研究院" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/e2f1190c120f7f3d74b630bfcfe9e58296bd535c.xml"/>
+        <outline text="深思圈" title="深思圈" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/3e6fcb56a39b2e18f1036113655d4ff8fe726b62.xml"/>
+        <outline text="Hugging Face" title="Hugging Face" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/8b68fdb4f24ab2287100988a8cec36363fec4214.xml"/>
+        <outline text="Founder Park" title="Founder Park" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/f940695505f2be1399d23cc98182297cadf6f90d.xml"/>
+        <outline text="vivo互联网技术" title="vivo互联网技术" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/b3ceb5cb1e4602ca55704650a157ec9c5b2f0d31.xml"/>
+        <outline text="歸藏的AI工具箱" title="歸藏的AI工具箱" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/1c3e3571b1627d23ee9c64521a0b0a41d3fe2987.xml"/>
+        <outline text="Clip设计夹" title="Clip设计夹" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/ebd5f5bd705dd531066eeca5ee500a1e6a269e17.xml"/>
+        <outline text="InfoQ 中文" title="InfoQ 中文" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/13da94d7eb314b49fa251cb7e8399cae29d772db.xml"/>
+        <outline text="Dify" title="Dify" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/e46c03a4cb65509e22ab9a8507888a2096319d65.xml"/>
+        <outline text="海外独角兽" title="海外独角兽" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/7200d3a5e976d231deb1e40ad33745c0e649b029.xml"/>
+        <outline text="赛博禅心" title="赛博禅心" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/752c31ca0446b837339463fc5440539e20267d2f.xml"/>
+        <outline text="小红书技术REDtech" title="小红书技术REDtech" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/0f8c47df6fd304112518544776e0bbf1d98ba0b9.xml"/>
+        <outline text="智谱" title="智谱" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/433d2134dca54d80804daf32e8be546155be3300.xml"/>
+        <outline text="月之暗面 Kimi" title="月之暗面 Kimi" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/c5c43d4bc17bae656763859ed0903bb6314ec6fe.xml"/>
+        <outline text="HelloGitHub" title="HelloGitHub" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/e6cc80b97bf64eeef61cc5927c78ba6ce3356422.xml"/>
+        <outline text="经纬创投" title="经纬创投" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/05efb1c4cf91e5a37443cc323150ea38a838e9fd.xml"/>
+        <outline text="腾讯混元" title="腾讯混元" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/306ce19a1ca590c9c2df781789e828d1acfa1356.xml"/>
+        <outline text="腾讯研究院" title="腾讯研究院" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/6152301e0978bffb0a8284cab339262b9764dcfb.xml"/>
+        <outline text="Thoughtworks洞见" title="Thoughtworks洞见" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/96b507f9985efa59e549e95a6363c2b6edfa8f2e.xml"/>
+        <outline text="浮之静" title="浮之静" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/abb0de0c0cb8f684a1606a4b20121b245547adce.xml"/>
+        <outline text="数字生命卡兹克" title="数字生命卡兹克" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/ff621c3e98d6ae6fceb3397e57441ffc6ea3c17f.xml"/>
+        <outline text="AI产品黄叔" title="AI产品黄叔" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/1f1030491e15e5349aae42367513d6b3f70a8f8b.xml"/>
+        <outline text="印记中文" title="印记中文" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/2b038bb5307a75a603405f7191b5030576d3e8bd.xml"/>
+        <outline text="真格基金" title="真格基金" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/47798a14d51da72e68fae4f7a259f096750cf03e.xml"/>
+        <outline text="大模型智能" title="大模型智能" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/bfc6440c1a2443fab9a6bf607137d41db5cd5c93.xml"/>
+        <outline text="深网腾讯新闻" title="深网腾讯新闻" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/396591aa7d3ef15fa3b5b17ec4b1aa840ebde335.xml"/>
+        <outline text="AI炼金术" title="AI炼金术" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/4915f3747653bbb9c7975323c11b768d2b9cd6c9.xml"/>
+        <outline text="山行AI" title="山行AI" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/98bc16b6f53902a2ab511b4faa3499e0a1c78eb1.xml"/>
+        <outline text="魔搭ModelScope社区" title="魔搭ModelScope社区" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/d993a885260f96057b9a4c96212cb2c95bb5054b.xml"/>
+        <outline text="强少来了" title="强少来了" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/3c36fe804f63a7b936e372a37929d81fa0ad948a.xml"/>
+        <outline text="土猛的员外" title="土猛的员外" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/3ee671d065adc460bc20bbd269115987098c54a0.xml"/>
+        <outline text="DeeplearningAI" title="DeeplearningAI" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/9d094d066a5faacff0eb0a6b95efbba20d4f1fc9.xml"/>
+        <outline text="机器之心SOTA模型" title="机器之心SOTA模型" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/2f520471856d56c7b3a95cd09eb777149b32828a.xml"/>
+        <outline text="阶跃星辰" title="阶跃星辰" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/3e2714d06aa36142e8ed6b3f4e5cf9090a069dd2.xml"/>
+        <outline text="快手技术" title="快手技术" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/c4cc10d2e32a5fa12927581ae581a336f399fe75.xml"/>
+        <outline text="DeepSeek" title="DeepSeek" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/1709da4f538d4ce4fb6d7a8ba1a5a1c297919601.xml"/>
+        <outline text="字节跳动Seed" title="字节跳动Seed" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/6efd40bb335d2037f365d284cb5e00f0843e737e.xml"/>
+        <outline text="青哥谈AI" title="青哥谈AI" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/00a1da3493512c20aff1ea5a0d1a02537e931b36.xml"/>
+        <outline text="AI寒武纪" title="AI寒武纪" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/5903009f48a5e4aa44d8ac941a54fe3aafc3e03c.xml"/>
+        <outline text="MiniMax 稀宇科技" title="MiniMax 稀宇科技" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/00306b171f754d463b28cf83f3ba086ad009b430.xml"/>
+        <outline text="Jina AI" title="Jina AI" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/ff2c5468828ebe7236afd6c1d128e219774487c2.xml"/>
+        <outline text="花叔" title="花叔" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/ed3e181242a4622709081439d802523ecf7b78f2.xml"/>
+        <outline text="向阳乔木推荐看" title="向阳乔木推荐看" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/3e50f11753a7c5ed689565fbf5abf96cb4541c57.xml"/>
+        <outline text="yikai 的摸鱼笔记" title="yikai 的摸鱼笔记" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/13492cb50df57702cdc0dfa71467cd03f9dd69be.xml"/>
+        <outline text="沃垠AI" title="沃垠AI" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/339818dbd5154cecdf5f4161f3391c7038a72bae.xml"/>
+        <outline text="L先生说" title="L先生说" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/31c7fb6f7959a5ff90ae997b536e78b8b3f23321.xml"/>
+        <outline text="有新Newin" title="有新Newin" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/74554dcb3da8982083426b871bc8c314a9de9729.xml"/>
+        <outline text="晚点LatePost" title="晚点LatePost" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/c442206ec9957f3c52f2f40300ca532079538b31.xml"/>
+        <outline text="袋鼠帝AI客栈" title="袋鼠帝AI客栈" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/24d0930cc9f4f0c708182dc1c087d41e1f4cbd33.xml"/>
+        <outline text="AI科技大本营" title="AI科技大本营" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/dfd3b5e742e32d8032a445832373191957202bf3.xml"/>
+        <outline text="卡尔的AI沃茨" title="卡尔的AI沃茨" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/8a1fc997e5c742e91ad7c253836c28ca3a69ccb1.xml"/>
+        <outline text="逛逛GitHub" title="逛逛GitHub" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/38be32e5376d852c13d3383e4d7a757fd9a55ff6.xml"/>
+        <outline text="阿真Irene" title="阿真Irene" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/d5ead392b0cf117d0ba4070e2261111fdde49711.xml"/>
+        <outline text="硅谷101" title="硅谷101" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/8f8fe34034f6123b168ed7847c51d50ff47cd7ee.xml"/>
+        <outline text="语言即世界language is world" title="语言即世界language is world" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/e1ed0d3edd93f90aef602105eb7ca51b35b7060a.xml"/>
+        <outline text="43 Talks" title="43 Talks" type="rss" xmlUrl="https://wechat2rss.bestblogs.dev/feed/4efe7ec6970afd4a050d6f10b9e8131a9d5e6816.xml"/>
+    </body>
+</opml>

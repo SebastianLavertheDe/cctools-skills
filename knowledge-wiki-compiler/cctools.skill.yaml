@@ -1,0 +1,53 @@
+apiVersion: cctools.dev/skill/v1
+id: knowledge-wiki-compiler
+version: 1.0.0
+publisher:
+  id: cctools
+  displayName: cctools
+kind: process
+display:
+  name: 知识 Wiki 编译器
+  description: 将 mymind 的文章和帖子增量编译为结构化 Markdown Wiki。
+  group: 知识库
+entrypoint:
+  runtime: python
+  script: main.py
+  args:
+    - --date
+    - "{{ inputs.date }}"
+runtime:
+  version: ">=3.11,<3.13"
+  dependencyFile: pyproject.toml
+  lockFile: uv.lock
+  packs: [python-core]
+inputs:
+  type: object
+  required: [date]
+  properties:
+    date:
+      type: string
+      format: compact-date
+capabilities:
+  mymind:
+    read: [article/**, post/**]
+    write: [wiki/**]
+  network:
+    required: true
+    hosts: ["*"]
+  subprocess:
+    allowed: false
+artifacts:
+  - id: wiki
+    type: directory
+    path: wiki/**
+execution:
+  concurrency:
+    maxInstances: 1
+    mutexes: [mymind:wiki]
+  timeoutSeconds: 7200
+  gracefulStopSeconds: 10
+  retry:
+    maxAttempts: 0
+platforms: [windows-x64, macos-arm64, linux-x64, wsl-linux-x64]
+compatibility:
+  minAppVersion: 1.0.0

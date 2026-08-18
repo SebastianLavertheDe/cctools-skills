@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opml version="2.0">
+    <head>
+        <title>RSS Subscriptions</title>
+    </head>
+    <body>
+        <outline text="Anthropic Engineering Blog" title="Anthropic Engineering Blog" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/anthropic_engineering_rss.xml" />
+        <outline text="Cursor Blog" title="Cursor Blog" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/cursor_blog_rss.xml" />
+        <outline text="Claude Blog" title="Claude Blog" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/claude_blog_rss.xml" />
+        <outline text="OpenAI Blog" title="OpenAI Blog" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/openai_blog_rss.xml" />
+        <outline text="Andrej Karpathy Blog" title="Andrej Karpathy Blog" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/karpathy_blog_rss.xml" />
+        <outline text="Azure Blog" title="Azure Blog" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/azure_blog_rss.xml" />
+        <outline text="TLDR Tech Newsletter" title="TLDR Tech Newsletter" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/tldr_tech_rss.xml" />
+        <outline text="Ben's Bites" title="Ben's Bites" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/bensbites_rss.xml" />
+        <outline text="TechCrunch AI" title="TechCrunch AI" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/techcrunch_ai_rss.xml" />
+        <outline text="TechCrunch AI Tag" title="TechCrunch AI Tag" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/techcrunch_ai_tag_rss.xml" />
+        <outline text="TechCrunch Generative AI" title="TechCrunch Generative AI" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/techcrunch_generative_ai_rss.xml" />
+        <outline text="Wired AI" title="Wired AI" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/wired_ai_rss.xml" />
+        <outline text="The Verge AI" title="The Verge AI" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/verge_ai_rss.xml" />
+        <outline text="VentureBeat AI" title="VentureBeat AI" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/venturebeat_ai_rss.xml" />
+        <outline text="Ars Technica AI" title="Ars Technica AI" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/arstechnica_ai_rss.xml" />
+        <outline text="雷峰网 AI" title="雷峰网 AI" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/leiphone_ai_rss.xml" />
+        <outline text="David Heinemeier Hansson" title="David Heinemeier Hansson" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/david_heinemeier_hansson_rss.xml" />
+        <outline text="Smashing Magazine" title="Smashing Magazine" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/smashing_magazine_rss.xml" />
+        <outline text="Latent Space" title="Latent Space" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/latent_space_rss.xml" />
+        <outline text="Google Research Blog" title="Google Research Blog" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/google_research_blog_rss.xml" />
+        <outline text="Google AI" title="Google AI" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/google_ai_rss.xml" />
+        <outline text="Hugging Face Blog" title="Hugging Face Blog" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/huggingface_blog_rss.xml" />
+        <outline text="NVIDIA AI Blog" title="NVIDIA AI Blog" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/nvidia_ai_blog_rss.xml" />
+        <outline text="AWS Machine Learning Blog" title="AWS Machine Learning Blog" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/aws_machine_learning_blog_rss.xml" />
+        <outline text="Apple Machine Learning Research" title="Apple Machine Learning Research" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/apple_machine_learning_research_rss.xml" />
+        <outline text="BAIR Blog" title="BAIR Blog" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/bair_blog_rss.xml" />
+        <outline text="MIT News AI" title="MIT News AI" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/mit_news_ai_rss.xml" />
+        <outline text="Lilian Weng" title="Lilian Weng" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/lilian_weng_rss.xml" />
+        <outline text="Chip Huyen" title="Chip Huyen" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/chip_huyen_rss.xml" />
+        <outline text="Eugene Yan" title="Eugene Yan" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/eugene_yan_rss.xml" />
+        <outline text="The Gradient" title="The Gradient" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/the_gradient_rss.xml" />
+        <outline text="fast.ai" title="fast.ai" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/fastai_rss.xml" />
+        <outline text="Interconnects" title="Interconnects" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/interconnects_rss.xml" />
+        <outline text="Ahead of AI" title="Ahead of AI" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/ahead_of_ai_rss.xml" />
+        <outline text="LessWrong" title="LessWrong" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/lesswrong_rss.xml" />
+        <outline text="Alignment Forum" title="Alignment Forum" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/alignment_forum_rss.xml" />
+        <outline text="simonwillison.net" title="simonwillison.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_simonwillisonnet_rss.xml" />
+        <outline text="jeffgeerling.com" title="jeffgeerling.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_jeffgeerlingcom_rss.xml" />
+        <outline text="seangoedecke.com" title="seangoedecke.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_seangoedeckecom_rss.xml" />
+        <outline text="krebsonsecurity.com" title="krebsonsecurity.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_krebsonsecuritycom_rss.xml" />
+        <outline text="daringfireball.net" title="daringfireball.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_daringfireballnet_rss.xml" />
+        <outline text="ericmigi.com" title="ericmigi.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_ericmigicom_rss.xml" />
+        <outline text="antirez.com" title="antirez.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_antirezcom_rss.xml" />
+        <outline text="idiallo.com" title="idiallo.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_idiallocom_rss.xml" />
+        <outline text="maurycyz.com" title="maurycyz.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_maurycyzcom_rss.xml" />
+        <outline text="pluralistic.net" title="pluralistic.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_pluralisticnet_rss.xml" />
+        <outline text="shkspr.mobi" title="shkspr.mobi" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_shksprmobi_rss.xml" />
+        <outline text="mitchellh.com" title="mitchellh.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_mitchellhcom_rss.xml" />
+        <outline text="dynomight.net" title="dynomight.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_dynomightnet_rss.xml" />
+        <outline text="xeiaso.net" title="xeiaso.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_xeiasonet_rss.xml" />
+        <outline text="devblogs.microsoft.com/oldnewthing" title="devblogs.microsoft.com/oldnewthing" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_devblogsmicrosoftcomoldnewthing_rss.xml" />
+        <outline text="righto.com" title="righto.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_rightocom_rss.xml" />
+        <outline text="lucumr.pocoo.org" title="lucumr.pocoo.org" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_lucumrpocooorg_rss.xml" />
+        <outline text="skyfall.dev" title="skyfall.dev" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_skyfalldev_rss.xml" />
+        <outline text="overreacted.io" title="overreacted.io" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_overreactedio_rss.xml" />
+        <outline text="timsh.org" title="timsh.org" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_timshorg_rss.xml" />
+        <outline text="johndcook.com" title="johndcook.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_johndcookcom_rss.xml" />
+        <outline text="gilesthomas.com" title="gilesthomas.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_gilesthomascom_rss.xml" />
+        <outline text="matklad.github.io" title="matklad.github.io" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_matkladgithubio_rss.xml" />
+        <outline text="derekthompson.org" title="derekthompson.org" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_derekthompsonorg_rss.xml" />
+        <outline text="evanhahn.com" title="evanhahn.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_evanhahncom_rss.xml" />
+        <outline text="rakhim.exotext.com" title="rakhim.exotext.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_rakhimexotextcom_rss.xml" />
+        <outline text="xania.org" title="xania.org" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_xaniaorg_rss.xml" />
+        <outline text="micahflee.com" title="micahflee.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_micahfleecom_rss.xml" />
+        <outline text="nesbitt.io" title="nesbitt.io" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_nesbittio_rss.xml" />
+        <outline text="construction-physics.com" title="construction-physics.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_construction_physicscom_rss.xml" />
+        <outline text="tedium.co" title="tedium.co" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_tediumco_rss.xml" />
+        <outline text="susam.net" title="susam.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_susamnet_rss.xml" />
+        <outline text="entropicthoughts.com" title="entropicthoughts.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_entropicthoughtscom_rss.xml" />
+        <outline text="buttondown.com/hillelwayne" title="buttondown.com/hillelwayne" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_buttondowncomhillelwayne_rss.xml" />
+        <outline text="dwarkesh.com" title="dwarkesh.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_dwarkeshcom_rss.xml" />
+        <outline text="borretti.me" title="borretti.me" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_borrettime_rss.xml" />
+        <outline text="wheresyoured.at" title="wheresyoured.at" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_wheresyouredat_rss.xml" />
+        <outline text="jayd.ml" title="jayd.ml" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_jaydml_rss.xml" />
+        <outline text="minimaxir.com" title="minimaxir.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_minimaxircom_rss.xml" />
+        <outline text="geohot.github.io" title="geohot.github.io" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_geohotgithubio_rss.xml" />
+        <outline text="paulgraham.com" title="paulgraham.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_paulgrahamcom_rss.xml" />
+        <outline text="filfre.net" title="filfre.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_filfrenet_rss.xml" />
+        <outline text="blog.jim-nielsen.com" title="blog.jim-nielsen.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_blogjim_nielsencom_rss.xml" />
+        <outline text="dfarq.homeip.net" title="dfarq.homeip.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_dfarqhomeipnet_rss.xml" />
+        <outline text="jyn.dev" title="jyn.dev" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_jyndev_rss.xml" />
+        <outline text="geoffreylitt.com" title="geoffreylitt.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_geoffreylittcom_rss.xml" />
+        <outline text="downtowndougbrown.com" title="downtowndougbrown.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_downtowndougbrowncom_rss.xml" />
+        <outline text="brutecat.com" title="brutecat.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_brutecatcom_rss.xml" />
+        <outline text="eli.thegreenplace.net" title="eli.thegreenplace.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_elithegreenplacenet_rss.xml" />
+        <outline text="abortretry.fail" title="abortretry.fail" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_abortretryfail_rss.xml" />
+        <outline text="fabiensanglard.net" title="fabiensanglard.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_fabiensanglardnet_rss.xml" />
+        <outline text="oldvcr.blogspot.com" title="oldvcr.blogspot.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_oldvcrblogspotcom_rss.xml" />
+        <outline text="bogdanthegeek.github.io" title="bogdanthegeek.github.io" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_bogdanthegeekgithubio_rss.xml" />
+        <outline text="hugotunius.se" title="hugotunius.se" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_hugotuniusse_rss.xml" />
+        <outline text="gwern.net" title="gwern.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_gwernnet_rss.xml" />
+        <outline text="berthub.eu" title="berthub.eu" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_berthubeu_rss.xml" />
+        <outline text="chadnauseam.com" title="chadnauseam.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_chadnauseamcom_rss.xml" />
+        <outline text="simone.org" title="simone.org" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_simoneorg_rss.xml" />
+        <outline text="it-notes.dragas.net" title="it-notes.dragas.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_it_notesdragasnet_rss.xml" />
+        <outline text="beej.us" title="beej.us" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_beejus_rss.xml" />
+        <outline text="hey.paris" title="hey.paris" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_heyparis_rss.xml" />
+        <outline text="danielwirtz.com" title="danielwirtz.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_danielwirtzcom_rss.xml" />
+        <outline text="matduggan.com" title="matduggan.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_matduggancom_rss.xml" />
+        <outline text="refactoringenglish.com" title="refactoringenglish.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_refactoringenglishcom_rss.xml" />
+        <outline text="worksonmymachine.ai" title="worksonmymachine.ai" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_worksonmymachinesubstackcom_rss.xml" />
+        <outline text="philiplaine.com" title="philiplaine.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_philiplainecom_rss.xml" />
+        <outline text="bernsteinbear.com" title="bernsteinbear.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_bernsteinbearcom_rss.xml" />
+        <outline text="danieldelaney.net" title="danieldelaney.net" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_danieldelaneynet_rss.xml" />
+        <outline text="troyhunt.com" title="troyhunt.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_troyhuntcom_rss.xml" />
+        <outline text="herman.bearblog.dev" title="herman.bearblog.dev" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_hermanbearblogdev_rss.xml" />
+        <outline text="tomrenner.com" title="tomrenner.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_tomrennercom_rss.xml" />
+        <outline text="blog.pixelmelt.dev" title="blog.pixelmelt.dev" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_blogpixelmeltdev_rss.xml" />
+        <outline text="martinalderson.com" title="martinalderson.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_martinaldersoncom_rss.xml" />
+        <outline text="danielchasehooper.com" title="danielchasehooper.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_danielchasehoopercom_rss.xml" />
+        <outline text="chiark.greenend.org.uk/~sgtatham" title="chiark.greenend.org.uk/~sgtatham" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_chiarkgreenendorguksgtatham_rss.xml" />
+        <outline text="grantslatton.com" title="grantslatton.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_grantslattoncom_rss.xml" />
+        <outline text="experimental-history.com" title="experimental-history.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_experimental_historycom_rss.xml" />
+        <outline text="anildash.com" title="anildash.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_anildashcom_rss.xml" />
+        <outline text="aresluna.org" title="aresluna.org" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_areslunaorg_rss.xml" />
+        <outline text="michael.stapelberg.ch" title="michael.stapelberg.ch" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_michaelstapelbergch_rss.xml" />
+        <outline text="miguelgrinberg.com" title="miguelgrinberg.com" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_miguelgrinbergcom_rss.xml" />
+        <outline text="keygen.sh" title="keygen.sh" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_keygensh_rss.xml" />
+        <outline text="mjg59.dreamwidth.org" title="mjg59.dreamwidth.org" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_mjg59dreamwidthorg_rss.xml" />
+        <outline text="computer.rip" title="computer.rip" type="rss" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/hn_computerrip_rss.xml" />
+        <outline text="GitButler Blog" title="GitButler Blog" type="rss" xmlUrl="https://blog.gitbutler.com/rss" />
+        <outline text="AIHOT 精选" title="AIHOT 精选" type="rss" xmlUrl="https://aihot.virxact.com/feed.xml?aihot_actor=0f7ea25a-507c-493e-b9ee-af255a4b766a" />
+        <outline text="WeChat Tech and AI Feeds" title="WeChat Tech and AI Feeds" type="opml" xmlUrl="subscriptions.wechat.opml" />
+        <!-- <outline text="Post RSS" title="Post RSS" type="post" xmlUrl="https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/post_rss.xml" category="post" /> -->
+        <!-- <outline text="Hack News Popular Blogs 2025" title="Hack News Popular Blogs 2025" xmlUrl="https://gist.githubusercontent.com/emschwartz/e6d2bf860ccc367fe37ff953ba6de66b/raw/hn-popular-blogs-2025.opml" /> -->
+    </body>
+</opml>

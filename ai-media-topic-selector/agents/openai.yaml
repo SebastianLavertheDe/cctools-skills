@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI 自媒体自动选题"
+  short_description: "每日为小红书和公众号生成 AI 热点选题与主编判断方案"
+  default_prompt: "Use $ai-media-topic-selector to generate the daily AI media topic markdown."

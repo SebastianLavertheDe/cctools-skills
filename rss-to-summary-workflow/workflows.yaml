@@ -1,0 +1,19 @@
+# Local/cron launcher config for scripts/run_workflow.py.
+# Desktop App Workflow Engine ignores this file and uses cctools.skill.yaml.
+#
+# 路径相对于本 skills 仓库根（skill 平铺在顶层）。
+# CCTOOLS_MYMIND_ROOT 必须由外部注入（crontab/手动运行时设置，指向
+# <cctools>/mymind）；CCTOOLS_SKILL_DATA_DIR 未设置时默认为各 skill 目录。
+skills:
+  rss-article-saver:
+    path: rss-article-saver
+    command: ["uv", "run", "--env-file", ".env", "python", "main.py"]
+  daily-article-summarizer:
+    path: daily-article-summarizer
+    command: ["uv", "run", "--env-file", ".env", "python", "main.py"]
+
+workflows:
+  rss-to-summary:
+    steps:
+      - skill: rss-article-saver
+      - skill: daily-article-summarizer

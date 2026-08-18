@@ -1,0 +1,1 @@
+"""Knowledge wiki compiler package."""

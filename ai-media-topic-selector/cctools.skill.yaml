@@ -1,0 +1,45 @@
+apiVersion: cctools.dev/skill/v1
+id: ai-media-topic-selector
+version: 1.0.0
+publisher:
+  id: cctools
+  displayName: cctools
+kind: agent
+display:
+  name: AI 自媒体选题助手
+  description: 在 AI 控制台中由 Claude Code 或 Codex CLI 基于本地材料生成 AI 自媒体选题文件。
+  group: 内容生产
+inputs:
+  type: object
+  properties:
+    date:
+      type: string
+      format: compact-date
+    platform:
+      type: string
+      enum: [wechat, xiaohongshu, short-video]
+capabilities:
+  mymind:
+    read: [daily-summary/**, post/**, reddit/**, creative/**]
+    write: [creative/01-内容生产/选题管理/**]
+  network:
+    required: false
+    hosts: []
+  subprocess:
+    allowed: false
+  browser: false
+artifacts:
+  - id: ai-topic
+    type: markdown
+    path: creative/01-内容生产/选题管理/ai_topic_{{ inputs.date }}.md
+execution:
+  concurrency:
+    maxInstances: 1
+    mutexes: [mymind:creative-topic-selection]
+  timeoutSeconds: 1800
+  gracefulStopSeconds: 10
+  retry:
+    maxAttempts: 0
+platforms: [windows-x64, macos-arm64, linux-x64, wsl-linux-x64]
+compatibility:
+  minAppVersion: 1.0.0

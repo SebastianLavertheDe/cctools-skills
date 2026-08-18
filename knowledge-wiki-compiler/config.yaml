@@ -1,0 +1,51 @@
+raw:
+  article_dir: "mymind/article"
+  post_dir: "mymind/post"
+  post_json_filename: "posts.json"
+
+wiki:
+  root_dir: "mymind/wiki"
+  link_style: "markdown_relative"
+  generate_queries: false
+
+compiler:
+  # Simplified wiki: themes + concepts only; entities disabled by default.
+  generate_entities: false
+  generate_source_notes: false
+  generate_post_source_notes: true
+  simple_group_pages: true
+  theme_wins_overlap: true
+
+  # Concept promotion: candidate → emerging (review only) → published (page)
+  concept_min_sources: 5
+  concept_emerging_min_sources: 5
+  concept_emerging_min_dates: 3
+  concept_published_min_sources: 12
+  concept_published_min_dates: 5
+
+  # Theme promotion (higher bar than concepts)
+  theme_min_sources: 8
+  theme_emerging_min_dates: 2
+  theme_published_min_sources: 15
+  theme_published_min_dates: 4
+
+  entity_min_sources: 2
+  evergreen_min_sources: 3
+  recent_limit: 40
+  stale_days: 30
+  review_days: 14
+  high_signal_window_days: 7
+  post_max_groups: 12
+  post_group_min_size: 3
+  post_tweets_per_group: 8
+
+relations:
+  concept_related_limit: 16
+  entity_related_limit: 12
+  theme_related_limit: 12
+  source_limit_per_section: 20
+
+ai:
+  shared_env_file: "knowledge-wiki-compiler/.env"
+  max_input_chars: 6000
+  max_entities: 8

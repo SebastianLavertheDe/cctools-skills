@@ -38,4 +38,5 @@ Skill 通过环境变量绑定数据与配置（与仓库位置解耦）：
 
 - `CCTOOLS_MYMIND_ROOT`：mymind 数据根（文章/日报/Reddit 输出）
 - `CCTOOLS_PROVIDERS_FILE`：AI provider 配置（`config/providers.yaml`，含密钥，不入库）
-- desktop-app 安装运行时会自动注入；crontab 直跑时需显式设置
+- `CCTOOLS_SKILL_DATA_DIR`：单个 Skill 的私有缓存目录；desktop-app 自动注入，工作流和 cron wrapper 默认使用对应 Skill 目录
+- desktop-app 安装运行时会自动注入；crontab 直跑时需显式设置 mymind 根与 provider 文件

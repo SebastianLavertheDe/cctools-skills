@@ -2,10 +2,19 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$ROOT_DIR/../../.." && pwd)"
+# 内容仓库（cctools）：优先显式绑定，其次从 mymind 根推导。
+REPO_ROOT="${CCTOOLS_REPO_ROOT:-}"
+if [[ -z "$REPO_ROOT" ]]; then
+  if [[ -n "${CCTOOLS_MYMIND_ROOT:-}" ]]; then
+    REPO_ROOT="$(cd "$CCTOOLS_MYMIND_ROOT/.." && pwd)"
+  else
+    echo "run_and_commit.sh: 需要设置 CCTOOLS_REPO_ROOT 或 CCTOOLS_MYMIND_ROOT（指向 cctools 仓库）" >&2
+    exit 1
+  fi
+fi
 LOG_DIR="$ROOT_DIR/logs"
 TARGET_DATE=""
-MYMIND_ROOT="$REPO_ROOT/mymind"
+MYMIND_ROOT="${CCTOOLS_MYMIND_ROOT:-$REPO_ROOT/mymind}"
 SKILL_DATA_DIR="$ROOT_DIR/data"
 PASSTHROUGH_ARGS=()
 

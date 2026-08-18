@@ -15,6 +15,8 @@ from .storage import write_subreddit_markdown
 def _ensure_local_cron_bindings() -> None:
     """Fill Broker-style bindings for bare local/cron invocations."""
     skill_dir = Path(__file__).resolve().parents[1]
+    if not os.environ.get("CCTOOLS_SKILL_DATA_DIR"):
+        os.environ["CCTOOLS_SKILL_DATA_DIR"] = str(skill_dir)
     repo_root = None
     for parent in [skill_dir, *skill_dir.parents]:
         if parent.name == ".claude":
@@ -26,8 +28,6 @@ def _ensure_local_cron_bindings() -> None:
         mymind = repo_root / "mymind"
         if mymind.is_dir():
             os.environ["CCTOOLS_MYMIND_ROOT"] = str(mymind)
-    if not os.environ.get("CCTOOLS_SKILL_DATA_DIR"):
-        os.environ["CCTOOLS_SKILL_DATA_DIR"] = str(skill_dir)
 
 
 def run() -> int:

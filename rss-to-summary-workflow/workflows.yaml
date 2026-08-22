@@ -2,8 +2,10 @@
 # Desktop App Workflow Engine ignores this file and uses cctools.skill.yaml.
 #
 # 路径相对于本 skills 仓库根（skill 平铺在顶层）。
-# CCTOOLS_MYMIND_ROOT 必须由外部注入（crontab/手动运行时设置，指向
-# <cctools>/mymind）；CCTOOLS_SKILL_DATA_DIR 未设置时默认为各 skill 目录。
+# OPENMIND_ROOT 必须由外部注入（crontab/手动运行时设置，指向用户在
+# openmind-app 选择的数据根，即数据仓根本身；旧名 CCTOOLS_MYMIND_ROOT 仍被接受）；
+# OPENMIND_SKILL_DATA_DIR 未设置时默认为各 skill 目录。
+# `--env-file .env` 仅在该文件实际存在时生效（launcher 自动剔除缺失项）。
 skills:
   rss-article-saver:
     path: rss-article-saver

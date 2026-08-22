@@ -18,12 +18,12 @@ class RSSMonitor:
     def __init__(
         self,
         config_file: str = "",
-        mymind_root: str | None = None,
+        content_root: str | None = None,
         skill_data_dir: str | None = None,
         run_date: str = "",
     ):
         """Initialize the RSS monitor"""
-        self.config = RSSConfig(config_file, mymind_root, skill_data_dir)
+        self.config = RSSConfig(config_file, content_root, skill_data_dir)
         self.rss_manager = RSSManager(self.config, run_date)
         self.opml_parser = OPMLParser(self.config.get_opml_file())
         self.processed_feed_sources = set()

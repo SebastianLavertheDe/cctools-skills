@@ -1,10 +1,10 @@
 raw:
-  article_dir: "mymind/article"
-  post_dir: "mymind/post"
+  article_dir: "article"
+  post_dir: "post"
   post_json_filename: "posts.json"
 
 wiki:
-  root_dir: "mymind/wiki"
+  root_dir: "wiki"
   link_style: "markdown_relative"
   generate_queries: false
 

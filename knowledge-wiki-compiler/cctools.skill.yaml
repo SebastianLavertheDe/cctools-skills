@@ -7,7 +7,7 @@ publisher:
 kind: process
 display:
   name: 知识 Wiki 编译器
-  description: 将 mymind 的文章和帖子增量编译为结构化 Markdown Wiki。
+  description: 将内容根的文章和帖子增量编译为结构化 Markdown Wiki。
   group: 知识库
 entrypoint:
   runtime: python

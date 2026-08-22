@@ -1,13 +1,15 @@
 ---
 name: ai-media-topic-selector
-description: "Generate a daily Chinese AI media topic Markdown file for self-media accounts, especially Xiaohongshu and WeChat Official Account, using local materials by default. Use when the user asks for AI daily topics, AI hot topic selection, 自媒体选题, 小红书选题, 公众号选题, 今日 AI 热点, AI 爆款选题, or to create ai_topic_YYYY-MM-DD.md from manual materials and local mymind sources."
+description: "Generate a daily Chinese AI media topic Markdown file for self-media accounts, especially Xiaohongshu and WeChat Official Account, using local materials by default. Use when the user asks for AI daily topics, AI hot topic selection, 自媒体选题, 小红书选题, 公众号选题, 今日 AI 热点, AI 爆款选题, or to create ai_topic_YYYY-MM-DD.md from manual materials and local knowledge-base sources."
 ---
 
 # AI Media Topic Selector
 
+> All paths in this document are relative to the content root `$OPENMIND_ROOT` — the data root the user selected in openmind-app. Always resolve via `$OPENMIND_ROOT`, never assume a fixed location.
+
 Generate one Chinese Markdown topic file per day:
 
-`mymind/creative/01-内容生产/选题管理/ai_topic_YYYY-MM-DD.md`
+`creative/01-内容生产/选题管理/ai_topic_YYYY-MM-DD.md`
 
 The output is an editor-grade topic memo for AI self-media publishing. It must make judgments, not merely summarize news.
 
@@ -24,12 +26,12 @@ Read these reference files before generating the final Markdown:
 Accept either:
 
 - User-provided hot materials, links, notes, screenshots, or pasted text
-- Local knowledge sources under `mymind/`, especially:
-  - `mymind/daily-summary/YYYYMMDD_daily_summary.md`
-  - `mymind/post/YYYYMMDD/posts.json`
-  - `mymind/reddit/YYYYMMDD/`
-  - `mymind/article/YYYYMMDD/`
-  - `mymind/daily-topic/`
+- Local knowledge sources under `$OPENMIND_ROOT/`, especially:
+  - `daily-summary/YYYYMMDD_daily_summary.md`
+  - `post/YYYYMMDD/posts.json`
+  - `reddit/YYYYMMDD/`
+  - `article/YYYYMMDD/`
+  - `daily-topic/`
 
 Default constraint: use only local files and user-provided content. Do not search the internet, open URLs, or browse public sources unless the user explicitly says to use the internet for this run.
 
@@ -39,7 +41,7 @@ If the user does not specify a date, use today's date. Save the file using dashe
 
 1. Gather candidate AI hotspots.
    - Prefer user-provided materials first.
-   - Then inspect local `mymind` sources for the target date.
+   - Then inspect local `$OPENMIND_ROOT` sources for the target date.
    - If material is insufficient, say which local sources were missing or thin; do not fill gaps with internet search by default.
    - Only use internet search when the user explicitly requests联网/搜索互联网/查最新公开资料 for this run.
 2. Build a candidate hotspot pool.
@@ -110,7 +112,7 @@ Every platform-agent output must include:
 
 ## Save Behavior
 
-Create `mymind/creative/01-内容生产/选题管理/` if it does not exist.
+Create `creative/01-内容生产/选题管理/` if it does not exist.
 
 If `ai_topic_YYYY-MM-DD.md` already exists:
 

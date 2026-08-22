@@ -15,7 +15,7 @@ Run:
 
 ```bash
 python3 asset-collector/scripts/collect_assets.py \
-  --mymind-root /path/to/mymind \
+  --content-root /path/to/content-root \
   --draft-dir "creative/01-内容生产/文稿库/02-制作中/YYYYMMDD-选题名"
 ```
 
@@ -23,7 +23,7 @@ Optional single-file mode:
 
 ```bash
 python3 asset-collector/scripts/collect_assets.py \
-  --mymind-root /path/to/mymind \
+  --content-root /path/to/content-root \
   --draft-dir "creative/01-内容生产/文稿库/02-制作中/YYYYMMDD-选题名" \
   --draft-file wechat-draft.md
 ```
@@ -34,9 +34,9 @@ Outputs:
 - `assets/missing_assets.json`
 - Updates root `manifest.json` with `asset_collection`, `assets`, and `missing_assets`
 
-The installed form may omit `--mymind-root` because the desktop app injects
-`CCTOOLS_MYMIND_ROOT`, `CCTOOLS_SKILL_DATA_DIR` and `CCTOOLS_RUN_DIR`. Relative
-paths are resolved below the explicit mymind root; no cctools ancestor is
+The installed form may omit `--content-root` because the desktop app injects
+`OPENMIND_ROOT`, `OPENMIND_SKILL_DATA_DIR` and `OPENMIND_RUN_DIR`. Relative
+paths are resolved below the explicit content root; no ancestor is
 discovered and no app-private state is written into the Skill package.
 
 ## Workflow
@@ -49,7 +49,7 @@ discovered and no app-private state is written into the Skill package.
    - explicit image slots like `[图1：来源截图，证明 xxx]`
    - Markdown links
    - raw URLs
-   - local paths below the bound mymind root
+   - local paths below the bound content root
    - Markdown image links
 3. Classify each item:
    - `source_screenshot`

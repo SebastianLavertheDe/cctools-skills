@@ -4,7 +4,7 @@ cctools 桌面应用的 Skill 分发仓库。每个顶层目录是一个独立 S
 
 ## 安装方式
 
-在 desktop-app → 设置 → Skills → 添加来源 → Git，输入本仓库地址：
+在 openmind-app → 设置 → Skills → 添加来源 → Git，输入本仓库地址：
 
 ```
 https://github.com/SebastianLavertheDe/cctools-skills.git
@@ -34,9 +34,12 @@ https://github.com/SebastianLavertheDe/cctools-skills.git
 
 ## 运行时绑定
 
-Skill 通过环境变量绑定数据与配置（与仓库位置解耦）：
+Skill 通过环境变量绑定数据与配置（与仓库位置解耦）。内容根是**用户在 openmind-app 里自选的数据根**（即数据仓根本身，扁平布局：`article/`、`post/` 等内容目录直接在根下）：
 
-- `CCTOOLS_MYMIND_ROOT`：mymind 数据根（文章/日报/Reddit 输出）
-- `CCTOOLS_PROVIDERS_FILE`：AI provider 配置（`config/providers.yaml`，含密钥，不入库）
-- `CCTOOLS_SKILL_DATA_DIR`：单个 Skill 的私有缓存目录；desktop-app 自动注入，工作流和 cron wrapper 默认使用对应 Skill 目录
-- desktop-app 安装运行时会自动注入；crontab 直跑时需显式设置 mymind 根与 provider 文件
+- `OPENMIND_ROOT`：内容根（当前正式名称；旧名 `CCTOOLS_MYMIND_ROOT` 仍作为兼容别名被接受）
+- `OPENMIND_SKILL_DATA_DIR`：单个 Skill 的私有缓存目录（旧名 `OPENMIND_SKILL_DATA_DIR` 兼容）；openmind-app Broker 自动注入，工作流和 cron wrapper 默认使用对应 Skill 目录
+- `OPENMIND_RUN_DIR`：Broker 为单次运行注入的临时运行目录（旧名 `OPENMIND_RUN_DIR` 兼容）
+- `OPENMIND_PROVIDER_*` / `OPENMIND_PROVIDERS_FILE`：AI provider 绑定（`config/providers.yaml`，含密钥，不入库；旧名 `OPENMIND_PROVIDER_*` / `OPENMIND_PROVIDERS_FILE` 兼容）
+- openmind-app 安装运行时由 Broker 自动注入；crontab 直跑时需显式设置内容根与 provider 文件
+
+文档与配置中的相对路径均以内容根为基准（等价于 `$OPENMIND_ROOT/xxx`）；代码兼容旧安装副本里带 `mymind/` 前缀的相对路径，解析时自动剥掉。

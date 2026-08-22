@@ -14,8 +14,8 @@ render:
   title_max_length: 120
 
 storage:
-  output_dir: "mymind/post"
-  article_output_dir: "mymind/article"
+  output_dir: "post"
+  article_output_dir: "article"
   cache_file: "posted_ids.json"
   daily_json_filename: "posts.json"
   daily_html_filename: "index.html"

@@ -7,7 +7,7 @@ publisher:
 kind: process
 display:
   name: 每日文章总结
-  description: 汇总 mymind 中当天文章、帖子和 Reddit 内容并生成每日总结。
+  description: 汇总内容根中当天文章、帖子和 Reddit 内容并生成每日总结。
   group: 内容链路
 entrypoint:
   runtime: python

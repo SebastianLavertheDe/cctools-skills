@@ -19,9 +19,13 @@ from pathlib import Path
 _TID_RE = re.compile(r"^x_(\d+)")
 
 
-def _default_article_root() -> Path:
-    # scripts/ -> x-following-fetcher -> skills -> .claude -> 项目根
-    return Path(__file__).resolve().parents[4] / "mymind" / "article"
+def _resolve_article_root(cli_value) -> Path:
+    # 绑定内容根（OPENMIND_ROOT，旧名 CCTOOLS_MYMIND_ROOT 兼容）；
+    # 扁平布局下文章位于 <root>/article。
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+    from runtime_paths import require_content_root
+
+    return require_content_root(str(cli_value) if cli_value else None) / "article"
 
 
 def collect_groups(article_root: Path) -> dict[str, dict[str, list[Path]]]:
@@ -42,13 +46,14 @@ def collect_groups(article_root: Path) -> dict[str, dict[str, list[Path]]]:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--article-root", type=Path, default=_default_article_root())
+    ap.add_argument("--article-root", type=Path, default=None,
+                    help="article 目录；默认 <内容根>/article（OPENMIND_ROOT，旧名 CCTOOLS_MYMIND_ROOT）")
     ap.add_argument("--apply", dest="dry_run", action="store_false",
                     help="真正执行删除 (默认 dry-run 仅预览)")
     ap.set_defaults(dry_run=True)
     args = ap.parse_args()
 
-    root: Path = args.article_root
+    root: Path = _resolve_article_root(args.article_root)
     if not root.is_dir():
         print(f"article-root 不存在: {root}", file=sys.stderr)
         return 2

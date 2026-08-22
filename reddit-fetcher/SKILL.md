@@ -1,8 +1,8 @@
 ---
 name: reddit-fetcher
-description: Fetches Reddit hot listings for configured subreddits and saves one markdown file per subreddit per day under mymind/reddit, with posts embedded in that file.
+description: Fetches Reddit hot listings for configured subreddits and saves one markdown file per subreddit per day under reddit, with posts embedded in that file.
 allowed-tools: Bash,Write,Read
-# desktop-app 执行配置
+# openmind-app 执行配置
 title: Reddit 内容抓取
 group: 采集
 cwd: reddit-fetcher
@@ -13,18 +13,18 @@ args:
   - main.py
 permission: edit
 outputArtifacts:
-  - mymind/reddit/${date}/
+  - reddit/${date}/
 timeoutMs: 3600000
 surfacesAsSource:
   sourceId: reddit
   sourceName: Reddit 订阅
   kind: reddit
-  artifactRoot: mymind/reddit
+  artifactRoot: reddit
 ---
 
 # Reddit Fetcher
 
-Fetches configured Reddit `hot` JSON feeds and stores them as one markdown file per subreddit per day under `mymind/reddit/`.
+Fetches configured Reddit `hot` JSON feeds and stores them as one markdown file per subreddit per day under `reddit/`.
 
 Comments are disabled by default for daily subreddit fetches. Use the bundled comment script when you need comments for a specific Reddit post URL.
 
@@ -65,9 +65,9 @@ Default behavior:
 - subreddit daily fetch: posts only
 - single-post comment fetch: use `scripts/fetch_comments.py`
 
-The default output root is `<mymind-root>/reddit`. The installed entrypoint
-receives `CCTOOLS_MYMIND_ROOT`, `CCTOOLS_SKILL_DATA_DIR` and `CCTOOLS_RUN_DIR`
+The default output root is `$OPENMIND_ROOT/reddit`. The installed entrypoint
+receives `OPENMIND_ROOT`, `OPENMIND_SKILL_DATA_DIR` and `OPENMIND_RUN_DIR`
 from the desktop app; it never discovers a project by walking parent folders.
 
-For direct execution, bind an explicit `--mymind-root` and `--skill-data-dir`
+For direct execution, bind an explicit `--content-root` and `--skill-data-dir`
 (or set the corresponding `CCTOOLS_*` environment values).

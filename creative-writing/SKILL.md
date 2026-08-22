@@ -1,6 +1,6 @@
 ---
 name: creative-writing
-description: "Chinese content creation workflow for multi-platform publishing (WeChat Official Account / 公众号, Xiaohongshu / 小红书, short video / 短视频). Covers topic capture, material research from mymind knowledge base, draft writing, title generation, cover text design, video intro optimization, article archiving, and data tracking. Use this skill whenever the user mentions writing articles, creating content for Chinese social media, managing topics (选题), generating titles (标题), writing drafts (文稿), creating cover text (封面), optimizing video intros (开头), recording data (数据), archiving articles (收录文章), or any content production activity for 公众号/小红书/短视频 — even if they don't explicitly name this skill. Also use when the user says trigger words like 记录选题, 深化选题, 写当天主题, 接管发布包, 生成发布包草稿, 写某个主题, 不限时间, 生成标题, 生成封面, 优化开头, 检索素材, 收录文章, 搜索补充资料, 记录数据, 沉淀素材, or 发布了."
+description: "Chinese content creation workflow for multi-platform publishing (WeChat Official Account / 公众号, Xiaohongshu / 小红书, short video / 短视频). Covers topic capture, material research from the local knowledge base, draft writing, title generation, cover text design, video intro optimization, article archiving, and data tracking. Use this skill whenever the user mentions writing articles, creating content for Chinese social media, managing topics (选题), generating titles (标题), writing drafts (文稿), creating cover text (封面), optimizing video intros (开头), recording data (数据), archiving articles (收录文章), or any content production activity for 公众号/小红书/短视频 — even if they don't explicitly name this skill. Also use when the user says trigger words like 记录选题, 深化选题, 写当天主题, 接管发布包, 生成发布包草稿, 写某个主题, 不限时间, 生成标题, 生成封面, 优化开头, 检索素材, 收录文章, 搜索补充资料, 记录数据, 沉淀素材, or 发布了."
 allowed-tools: Bash,Write,Read,Edit,Glob,Grep,WebSearch
 ---
 
@@ -10,9 +10,11 @@ A systematic content creation workflow that turns fragmented creation into a rep
 
 ## Directory Map
 
+> All paths in this document are relative to the content root `$OPENMIND_ROOT` — the data root the user selected in openmind-app. Always resolve via `$OPENMIND_ROOT`, never assume a fixed location.
+
 The system spans two locations:
 
-**Content production** at `mymind/creative/` (relative to project root):
+**Content production** at `$OPENMIND_ROOT/creative/`:
 ```
 01-内容生产/
 ├── 选题管理/
@@ -32,7 +34,7 @@ The system spans two locations:
 04-业务运营/
 ```
 
-**Knowledge base** at `mymind/` (relative to project root; e.g. `/home/say/work/github/cctools/mymind/` on Linux, `/Users/<you>/work/github/cctools/mymind/` on macOS, `D:\work\cctools\mymind\` on Windows):
+**Knowledge base** at `$OPENMIND_ROOT/` (the user-selected data root):
 ```
 article/          # Archived web articles, original text, extracts
 daily-summary/    # Daily info summaries and reviews
@@ -49,7 +51,7 @@ wiki/
 └── _state/       # System state (don't edit directly)
 ```
 
-When this skill says "素材库", it means the mymind knowledge base above.
+When this skill says "素材库", it means the knowledge base above ($OPENMIND_ROOT).
 
 ---
 
@@ -60,7 +62,7 @@ When this skill says "素材库", it means the mymind knowledge base above.
 **Triggers**: `记录选题`, `有个想法`, `选题`
 
 1. If the user's idea isn't clear, ask what it is
-2. Append to `mymind/creative/01-内容生产/选题管理/00-选题收集箱.md`
+2. Append to `creative/01-内容生产/选题管理/00-选题收集箱.md`
 3. Format: `- [ ] 选题内容 | 来源 | YYYY-MM-DD`
 4. Confirm with a short message
 
@@ -78,7 +80,7 @@ Use the three-step creation method for every serious draft:
 
 **Step 1: Search the knowledge base** (mandatory, never skip)
 
-Search these directories in mymind for relevant material:
+Search these directories under $OPENMIND_ROOT for relevant material:
 - `daily-summary/` — daily source summaries and X/Reddit observations?
 - `daily-topic/` — daily reading leads and prior topic notes?
 - `post/` — X/Twitter collected posts and rendered pages?
@@ -88,8 +90,8 @@ Search these directories in mymind for relevant material:
 - `wiki/themes/` — thematic threads and viewpoints?
 - `wiki/entities/` — people, products, platforms?
 - `weixin-drafts/` — reusable WeChat drafts?
-- `mymind/creative/01-内容生产/选题管理/` — social-media topic files and planning notes?
-- `mymind/creative/01-内容生产/文稿库/03-已发布/` — prior published content and reusable structures?
+- `creative/01-内容生产/选题管理/` — social-media topic files and planning notes?
+- `creative/01-内容生产/文稿库/03-已发布/` — prior published content and reusable structures?
 
 **Step 2: Suggest reuse**
 
@@ -113,9 +115,9 @@ If the angle is weak or only summarizes information, say so and ask for more dir
 2. Ask: content type? (图文/短视频/音频)
 3. Read the platform methodology file (see References section below)
 4. If the user asks to deepen/develop a topic, create a topic brief: core viewpoint, target reader, usable materials, angle design, opening direction, story line, missing research, and next writing step
-5. Save topic briefs to `mymind/creative/01-内容生产/文稿库/01-待深化/`
+5. Save topic briefs to `creative/01-内容生产/文稿库/01-待深化/`
 6. If the user asks for a full article/script, write the draft following the writing rules below
-7. Save full drafts to `mymind/creative/01-内容生产/文稿库/02-制作中/`
+7. Save full drafts to `creative/01-内容生产/文稿库/02-制作中/`
 8. Filename: `YYYYMMDD-平台-选题.md`
 
 ### 2.1 接管发布包并写正文 (Continue Package Into Draft)
@@ -124,7 +126,7 @@ If the angle is weak or only summarizes information, say so and ask for more dir
 
 Use this after `daily-writing-orchestrator` has selected today's topic and created a package under:
 
-`mymind/creative/01-内容生产/文稿库/02-制作中/YYYYMMDD-选题名/`
+`creative/01-内容生产/文稿库/02-制作中/YYYYMMDD-选题名/`
 
 Default topic behavior:
 
@@ -135,7 +137,7 @@ Default topic behavior:
 Workflow:
 
 1. Read `topic-brief.md`, `manifest.json`, and the requested platform task file (`xiaohongshu-draft.md`, `wechat-draft.md`, or `twitter-thread.md`)
-2. Search the full local `mymind/` material library before writing, following the mandatory search rules above
+2. Search the full local `$OPENMIND_ROOT/` material library before writing, following the mandatory search rules above
 3. Read the relevant platform methodology file
 4. Confirm the three-step creation frame from the package: information, angle, and story line. If the package lacks a usable angle, add one before drafting.
 5. Replace the task body with a real platform draft while preserving frontmatter
@@ -177,7 +179,7 @@ Output format:
 
 **Triggers**: `检索素材`, `找素材`, `有没有相关的`
 
-1. Search `mymind/` for the keyword
+1. Search `$OPENMIND_ROOT/` for the keyword
 2. Return matching files with brief content descriptions
 3. Highlight the most relevant items
 
@@ -187,7 +189,7 @@ Output format:
 
 1. Gather: source (公众号/知乎/36氪 etc.), author, title, link (optional)
 2. Ask what to extract: core viewpoints, great passages, reusable material (data/cases/quotes/frameworks), inspirations
-3. Save to `mymind/article/YYYYMMDD/`
+3. Save to `article/YYYYMMDD/`
 4. Filename: `来源-作者-标题.md`
 5. Use standard article template with metadata header
 
@@ -204,7 +206,7 @@ Output format:
 **Triggers**: `记录数据`, `数据复盘`, `这条内容数据`
 
 1. Ask for: content title, platform, metrics
-2. Record to `mymind/creative/03-数据统计/内容数据统计.md`
+2. Record to `creative/03-数据统计/内容数据统计.md`
 3. If performance is outstanding, suggest adding to 爆款文稿库
 
 ### 10. 沉淀素材 (Deposit Material)
@@ -212,7 +214,7 @@ Output format:
 **Triggers**: `沉淀素材`, `保存到素材库`, `这个概念很好`
 
 1. Ask: what type? (核心概念/金句/案例)
-2. Save to the appropriate mymind subdirectory:
+2. Save to the appropriate knowledge-base subdirectory:
    - Concepts → `wiki/concepts/概念名称.md`
    - Quotes → append to relevant theme file
    - Cases → `wiki/sources/类型-案例名称.md`
@@ -310,7 +312,7 @@ Always read the relevant methodology file before generating content — it conta
 
 ## Work Principles
 
-1. **Search before creating**: Always search mymind before writing. Reuse beats reinvention.
+1. **Search before creating**: Always search the knowledge base before writing. Reuse beats reinvention.
 2. **Suggest reuse**: Found something relevant? Tell the user. Don't silently rewrite.
 3. **Deposit after creating**: After each piece, ask if anything is worth saving back to the knowledge base.
 4. **Data drives iteration**: Remind the user to record performance data. Methodology evolves from evidence.

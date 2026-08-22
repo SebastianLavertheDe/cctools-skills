@@ -10,7 +10,7 @@ bash video-burnin-subtitles/scripts/burnin_subtitles.sh \
 Environment variables (required for translation; a managed Run injects these from the selected Provider Profile):
 
 ```bash
-export CCTOOLS_MYMIND_ROOT="/absolute/path/to/mymind"
+export OPENMIND_ROOT="/absolute/path/to/content-root"
 export CCTOOLS_PROVIDER_PROTOCOL="openai-chat"
 export CCTOOLS_PROVIDER_BASE_URL="https://generativelanguage.googleapis.com/v1beta/openai"
 export CCTOOLS_PROVIDER_MODEL="gemini-2.5-flash"
@@ -35,7 +35,7 @@ yt-dlp -f "bv*+ba/b" \
   --write-subs --write-auto-subs \
   --sub-langs "<lang>" --sub-format "srt/vtt" \
   --restrict-filenames \
-  -o "$CCTOOLS_MYMIND_ROOT/video/%(title).200s/%(title).200s.%(ext)s" \
+  -o "$OPENMIND_ROOT/video/%(title).200s/%(title).200s.%(ext)s" \
   "<URL>"
 ```
 

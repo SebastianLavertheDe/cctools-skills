@@ -10,17 +10,17 @@ class RuntimePathError(ValueError):
     """Raised when an installed Skill is missing a safe path binding."""
 
 
-def require_mymind_root(cli_value: str | None = None) -> Path:
-    raw = (cli_value or os.environ.get("CCTOOLS_MYMIND_ROOT") or os.environ.get("MYMIND_ROOT") or "").strip()
+def require_content_root(cli_value: str | None = None) -> Path:
+    raw = (cli_value or os.environ.get("OPENMIND_ROOT") or os.environ.get("CCTOOLS_MYMIND_ROOT") or "").strip()
     if not raw:
-        raise RuntimePathError("mymind root is required; pass --mymind-root or CCTOOLS_MYMIND_ROOT")
+        raise RuntimePathError("content root is required; pass --content-root or set OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT)")
     root = Path(raw).expanduser().resolve()
     if not root.is_dir():
-        raise RuntimePathError(f"mymind root is not an existing directory: {root}")
+        raise RuntimePathError(f"content root is not an existing directory: {root}")
     return root
 
 
-def resolve_mymind_path(value: str, root: Path, label: str) -> Path:
+def resolve_content_path(value: str, root: Path, label: str) -> Path:
     raw = value.strip()
     if not raw:
         raise RuntimePathError(f"{label} must not be empty")
@@ -34,5 +34,5 @@ def resolve_mymind_path(value: str, root: Path, label: str) -> Path:
     try:
         resolved.relative_to(root)
     except ValueError as exc:
-        raise RuntimePathError(f"{label} must stay inside mymind root: {raw}") from exc
+        raise RuntimePathError(f"{label} must stay inside the content root: {raw}") from exc
     return resolved

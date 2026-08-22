@@ -20,7 +20,7 @@ import yaml
 from .config import AppConfig, load_config
 from .content_ai import KnowledgeWikiWriter
 from .entity_ai import LLMEntityExtractor
-from .runtime_paths import RuntimePathError, optional_run_dir, require_skill_data_dir, require_mymind_root
+from .runtime_paths import RuntimePathError, optional_run_dir, require_skill_data_dir, require_content_root
 
 
 SOURCE_NOTE_WRITE_LOCK = threading.Lock()
@@ -715,7 +715,7 @@ def _yesterday() -> str:
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Compile raw mymind sources into a Markdown wiki.")
     parser.add_argument("--config", default="config.yaml")
-    parser.add_argument("--mymind-root", default="", help="Explicit mymind root; defaults to CCTOOLS_MYMIND_ROOT.")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
     parser.add_argument("--skill-data-dir", default="", help="App-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="App-private Run working directory.")
     parser.add_argument("--force", action="store_true")
@@ -737,7 +737,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     try:
-        root = require_mymind_root(args.mymind_root)
+        root = require_content_root(args.content_root)
         data_dir = require_skill_data_dir(args.skill_data_dir)
         optional_run_dir(args.run_dir)
         config_path = Path(args.config).expanduser()
@@ -829,6 +829,7 @@ def compile_wiki(
     if not previous_registry:
         previous_registry = collect_existing_source_records(config)
     else:
+        previous_registry = migrate_registry_legacy_paths(previous_registry)
         previous_registry = migrate_registry_link_paths(previous_registry, config)
     print(f"[start] normalizing registry ({len(previous_registry)} records)", flush=True)
     registry_before_normalization = previous_registry
@@ -2798,7 +2799,51 @@ def record_link_path(record: dict[str, Any], config: AppConfig) -> Path | None:
 
 def is_mirrored_wiki_source_note(path_value: str) -> bool:
     normalized = path_value.replace("\\", "/").strip().lower()
-    return normalized.startswith("mymind/wiki/sources/")
+    return normalized.startswith(("wiki/sources/", "mymind/wiki/sources/"))
+
+
+def _strip_legacy_mymind_prefix(value: str) -> str:
+    normalized = value.replace("\\", "/")
+    if normalized.startswith("mymind/"):
+        return normalized[len("mymind/"):]
+    return value
+
+
+def migrate_registry_legacy_paths(registry: dict[str, Any]) -> dict[str, Any]:
+    """One-time migration for records written before the flat content root.
+
+    Legacy layouts stored root-relative ids and paths with a leading
+    ``mymind/`` segment; the flat content root has no such layer, so those
+    records resolve to dead paths and re-register as duplicates. Strip the
+    prefix and merge collisions, preferring records already stored flat.
+    """
+    flat_records: list[tuple[str, Any]] = []
+    legacy_records: list[tuple[str, Any]] = []
+    for source_id, record in registry.items():
+        new_id = source_id.replace(":mymind/", ":", 1) if isinstance(source_id, str) else source_id
+        (flat_records if new_id == source_id else legacy_records).append((new_id, record))
+    migrated: dict[str, Any] = {}
+    for new_id, record in flat_records + legacy_records:
+        if new_id in migrated:
+            continue
+        if not isinstance(record, dict):
+            migrated[new_id] = record
+            continue
+        updated = dict(record)
+        for field in ("source_path", "note_path"):
+            raw = updated.get(field)
+            if isinstance(raw, str) and raw:
+                updated[field] = _strip_legacy_mymind_prefix(raw)
+        raw_id = updated.get("source_id")
+        if isinstance(raw_id, str) and ":mymind/" in raw_id:
+            updated["source_id"] = raw_id.replace(":mymind/", ":", 1)
+        migrated[new_id] = updated
+    if legacy_records or len(migrated) != len(registry):
+        print(
+            f"[migrate] registry legacy paths normalized: {len(registry)} -> {len(migrated)} records",
+            flush=True,
+        )
+    return migrated
 
 
 def migrate_registry_link_paths(registry: dict[str, Any], config: AppConfig) -> dict[str, Any]:
@@ -2843,7 +2888,7 @@ def collect_existing_source_records(config: AppConfig) -> dict[str, dict[str, An
                 if isinstance(record, dict) and str(record.get("source_id", "") or source_id).strip()
             }
             if records:
-                return migrate_registry_link_paths(records, config)
+                return migrate_registry_link_paths(migrate_registry_legacy_paths(records), config)
     records: dict[str, dict[str, Any]] = {}
     for path in config.sources_dir.rglob("*.md"):
         note = parse_source_note(path, config)

@@ -5,7 +5,7 @@ from pathlib import Path
 
 import yaml
 
-from .runtime_paths import require_skill_data_dir, require_mymind_root, resolve_data_path, resolve_mymind_path
+from .runtime_paths import require_skill_data_dir, require_content_root, resolve_data_path, resolve_content_path
 
 
 @dataclass(slots=True)
@@ -62,12 +62,12 @@ class AppConfig:
 
 def load_config(
     config_path: Path,
-    mymind_root: str | Path | None = None,
+    content_root: str | Path | None = None,
     skill_data_dir: str | Path | None = None,
 ) -> AppConfig:
     raw = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
     skill_root = config_path.parent
-    root = require_mymind_root(str(mymind_root) if mymind_root is not None else None)
+    root = require_content_root(str(content_root) if content_root is not None else None)
     data_dir = require_skill_data_dir(str(skill_data_dir) if skill_data_dir is not None else None)
 
     raw_cfg = raw.get("raw", {})
@@ -76,7 +76,7 @@ def load_config(
     relations_cfg = raw.get("relations", {})
     ai_cfg = raw.get("ai", {})
 
-    wiki_dir = resolve_mymind_path(str(wiki_cfg.get("root_dir", "mymind/wiki")), root, "wiki.root_dir")
+    wiki_dir = resolve_content_path(str(wiki_cfg.get("root_dir", "wiki")), root, "wiki.root_dir")
     # The wiki is user content; compiler state is app-private and must not
     # contaminate the content tree.
     state_dir = data_dir / "wiki-state"
@@ -86,8 +86,8 @@ def load_config(
         # Kept for the compiler's relative-link compatibility code. It now
         # means the bound mymind root, never a repository discovered by walk-up.
         repo_root=root,
-        article_dir=resolve_mymind_path(str(raw_cfg.get("article_dir", "mymind/article")), root, "raw.article_dir"),
-        post_dir=resolve_mymind_path(str(raw_cfg.get("post_dir", "mymind/post")), root, "raw.post_dir"),
+        article_dir=resolve_content_path(str(raw_cfg.get("article_dir", "article")), root, "raw.article_dir"),
+        post_dir=resolve_content_path(str(raw_cfg.get("post_dir", "post")), root, "raw.post_dir"),
         post_json_filename=str(raw_cfg.get("post_json_filename", "posts.json")),
         wiki_dir=wiki_dir,
         state_dir=state_dir,

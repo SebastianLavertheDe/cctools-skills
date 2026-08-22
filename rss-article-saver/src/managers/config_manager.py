@@ -8,7 +8,7 @@ import yaml
 from typing import Dict
 from pathlib import Path
 
-from ..runtime_paths import require_skill_data_dir, require_mymind_root, resolve_data_path, resolve_mymind_path
+from ..runtime_paths import require_skill_data_dir, require_content_root, resolve_data_path, resolve_content_path
 
 
 class RSSConfig:
@@ -17,7 +17,7 @@ class RSSConfig:
     def __init__(
         self,
         config_file: str = "",
-        mymind_root: str | None = None,
+        content_root: str | None = None,
         skill_data_dir: str | None = None,
     ):
         skill_root = Path(__file__).resolve().parents[2]
@@ -26,7 +26,7 @@ class RSSConfig:
             config_path = skill_root / config_path
         self.config_file = str(config_path.resolve())
         self.skill_root = skill_root
-        self.mymind_root = require_mymind_root(mymind_root)
+        self.content_root = require_content_root(content_root)
         self.skill_data_dir = require_skill_data_dir(skill_data_dir)
         self.config = self._load_config()
 
@@ -47,7 +47,7 @@ class RSSConfig:
     def get_article_base_dir(self) -> str:
         """Get article base directory (supports ~ and relative paths)"""
         raw = str(self.config.get('article_base_dir', '') or 'article')
-        return str(resolve_mymind_path(raw, self.mymind_root, "article_base_dir"))
+        return str(resolve_content_path(raw, self.content_root, "article_base_dir"))
 
     def get_opml_file(self) -> str:
         """Get OPML file path"""

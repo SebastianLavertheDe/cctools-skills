@@ -7,7 +7,7 @@ publisher:
 kind: process
 display:
   name: RSS 文章采集
-  description: 抓取 RSS、提取文章正文并保存到 mymind/article。
+  description: 抓取 RSS、提取文章正文并保存到 article/（相对内容根）。
   group: 内容采集
 entrypoint:
   runtime: python

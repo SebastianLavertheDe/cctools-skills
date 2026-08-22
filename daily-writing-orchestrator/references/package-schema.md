@@ -2,7 +2,7 @@
 
 Package path:
 
-`mymind/creative/01-内容生产/文稿库/02-制作中/YYYYMMDD-选题名/`
+`creative/01-内容生产/文稿库/02-制作中/YYYYMMDD-选题名/`
 
 Files:
 

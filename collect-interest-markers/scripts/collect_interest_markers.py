@@ -10,7 +10,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from runtime_paths import RuntimePathError, require_mymind_root, resolve_mymind_path
+from runtime_paths import RuntimePathError, require_content_root, resolve_content_path
 
 
 MARKER_PATTERNS = [
@@ -45,25 +45,25 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--source", help="Daily summary markdown file to scan.")
     parser.add_argument("--date", help="Date in YYYYMMDD or YYYY-MM-DD format.")
-    parser.add_argument("--mymind-root", default="", help="Explicit mymind root; defaults to CCTOOLS_MYMIND_ROOT.")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
     parser.add_argument("--skill-data-dir", default="", help="Reserved app-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="Reserved app-private Run working directory.")
-    parser.add_argument("--inbox", help="Output inbox file. Defaults to the standard mymind path.")
+    parser.add_argument("--inbox", help="Output inbox file. Defaults to the standard content-root path.")
     parser.add_argument("--dry-run", action="store_true", help="Print found items without writing.")
     return parser.parse_args()
 
 
-def resolve_source(args: argparse.Namespace, mymind_root: Path) -> Path:
+def resolve_source(args: argparse.Namespace, content_root: Path) -> Path:
     if args.source:
-        return resolve_mymind_path(args.source, mymind_root, "--source")
+        return resolve_content_path(args.source, content_root, "--source")
 
     if args.date:
         compact_date = args.date.replace("-", "")
-        return mymind_root / SUMMARY_DIR_RELATIVE / f"{compact_date}_daily_summary.md"
+        return content_root / SUMMARY_DIR_RELATIVE / f"{compact_date}_daily_summary.md"
 
-    candidates = sorted((mymind_root / SUMMARY_DIR_RELATIVE).glob("*_daily_summary.md"))
+    candidates = sorted((content_root / SUMMARY_DIR_RELATIVE).glob("*_daily_summary.md"))
     if not candidates:
-        raise FileNotFoundError(f"No daily summary files found under {mymind_root / SUMMARY_DIR_RELATIVE}")
+        raise FileNotFoundError(f"No daily summary files found under {content_root / SUMMARY_DIR_RELATIVE}")
     return candidates[-1]
 
 
@@ -75,9 +75,9 @@ def format_date(source: Path) -> str:
     return f"{raw[:4]}-{raw[4:6]}-{raw[6:8]}"
 
 
-def relative_ref(path: Path, mymind_root: Path, line_no: int) -> str:
+def relative_ref(path: Path, content_root: Path, line_no: int) -> str:
     try:
-        rel = path.resolve().relative_to(mymind_root)
+        rel = path.resolve().relative_to(content_root)
     except ValueError:
         rel = path.resolve()
     return f"{rel}:{line_no}"
@@ -184,7 +184,7 @@ def item_id(source_ref: str, title: str, value: str) -> str:
     return hashlib.sha1(normalized.encode("utf-8")).hexdigest()[:12]
 
 
-def extract_items(source: Path, mymind_root: Path) -> list[InterestItem]:
+def extract_items(source: Path, content_root: Path) -> list[InterestItem]:
     lines = source.read_text(encoding="utf-8").splitlines()
     items: list[InterestItem] = []
 
@@ -197,7 +197,7 @@ def extract_items(source: Path, mymind_root: Path) -> list[InterestItem]:
         body = match.group("body").strip()
         context = collect_block(lines, index)
         title, value = title_and_value(body)
-        source_ref = relative_ref(source, mymind_root, index + 1)
+        source_ref = relative_ref(source, content_root, index + 1)
         next_step = "判断是否进入选题池" if kind == "i" else "深化选题并补官方来源"
         items.append(
             InterestItem(
@@ -305,9 +305,9 @@ def print_items(items: list[InterestItem]) -> None:
 def main() -> int:
     args = parse_args()
     try:
-        mymind_root = require_mymind_root(args.mymind_root)
-        source = resolve_source(args, mymind_root).resolve()
-        inbox = resolve_mymind_path(args.inbox, mymind_root, "--inbox") if args.inbox else mymind_root / INBOX_RELATIVE
+        content_root = require_content_root(args.content_root)
+        source = resolve_source(args, content_root).resolve()
+        inbox = resolve_content_path(args.inbox, content_root, "--inbox") if args.inbox else content_root / INBOX_RELATIVE
     except RuntimePathError as exc:
         print(str(exc), file=sys.stderr)
         return 1
@@ -316,7 +316,7 @@ def main() -> int:
         print(f"Source file not found: {source}", file=sys.stderr)
         return 1
 
-    items = extract_items(source, mymind_root)
+    items = extract_items(source, content_root)
     i_count = sum(1 for item in items if item.kind == "i")
     t_count = sum(1 for item in items if item.kind == "t")
     print(f"Source: {source}")

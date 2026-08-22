@@ -1,9 +1,9 @@
 # Article source directory
 article_directory:
-  - "mymind/article"
+  - "article"
 
 reddit_directory:
-  - "mymind/reddit"
+  - "reddit"
 
 # AI settings
 # provider 链由 ArticleSummarizer 按 _shared auto order 决定（claude→deepseek→doubao），

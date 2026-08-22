@@ -9,11 +9,11 @@ If the user provides a URL without pasted content, treat it as a reference strin
 ## Collection Order
 
 1. User-provided materials
-2. Local mymind sources for the target date:
-   - `mymind/daily-summary/YYYYMMDD_daily_summary.md`
-   - `mymind/post/YYYYMMDD/posts.json`
-   - `mymind/reddit/YYYYMMDD/`
-   - `mymind/article/YYYYMMDD/`
+2. Local content-root sources for the target date:
+   - `daily-summary/YYYYMMDD_daily_summary.md`
+   - `post/YYYYMMDD/posts.json`
+   - `reddit/YYYYMMDD/`
+   - `article/YYYYMMDD/`
 3. Recent local adjacent dates when the target date has too little material
 4. Public web sources only when the user explicitly allows internet use
 

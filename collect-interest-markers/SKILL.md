@@ -1,6 +1,6 @@
 ---
 name: collect-interest-markers
-description: Collect `[i]` and `[t]` reading markers from `daily-summary/*_daily_summary.md` into `creative/01-内容生产/选题管理/00-兴趣收集箱.md` below the bound mymind root. Use when the user asks to 整理/收集/提取 daily-summary 兴趣标记, 将标记转为兴趣收集箱, or batch process marked daily-summary items into 待整理 and 选题候选.
+description: Collect `[i]` and `[t]` reading markers from `daily-summary/*_daily_summary.md` into `creative/01-内容生产/选题管理/00-兴趣收集箱.md` below the bound content root. Use when the user asks to 整理/收集/提取 daily-summary 兴趣标记, 将标记转为兴趣收集箱, or batch process marked daily-summary items into 待整理 and 选题候选.
 ---
 
 # Collect Interest Markers
@@ -27,17 +27,17 @@ The script also accepts `- [ ] [i] ...` and `- [ ] [t] ...` if the user marks ch
 
 ## Quick Start
 
-Run with an explicit mymind root:
+Run with an explicit content root:
 
 ```bash
-python3 scripts/collect_interest_markers.py --mymind-root /path/to/mymind --date 20260605
+python3 scripts/collect_interest_markers.py --content-root /path/to/content-root --date 20260605
 ```
 
 Useful variants:
 
 ```bash
-python3 scripts/collect_interest_markers.py --mymind-root /path/to/mymind --source daily-summary/20260605_daily_summary.md
-python3 scripts/collect_interest_markers.py --mymind-root /path/to/mymind --source daily-summary/20260605_daily_summary.md --dry-run
+python3 scripts/collect_interest_markers.py --content-root /path/to/content-root --source daily-summary/20260605_daily_summary.md
+python3 scripts/collect_interest_markers.py --content-root /path/to/content-root --source daily-summary/20260605_daily_summary.md --dry-run
 ```
 
 Default output:
@@ -45,8 +45,8 @@ Default output:
 ```text
 creative/01-内容生产/选题管理/00-兴趣收集箱.md
 
-The desktop app injects `CCTOOLS_MYMIND_ROOT`, `CCTOOLS_SKILL_DATA_DIR` and
-`CCTOOLS_RUN_DIR`; the script never searches ancestor directories for a
+The desktop app injects `OPENMIND_ROOT`, `OPENMIND_SKILL_DATA_DIR` and
+`OPENMIND_RUN_DIR`; the script never searches ancestor directories for a
 repository.
 ```
 

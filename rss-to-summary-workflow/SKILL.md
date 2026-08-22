@@ -13,13 +13,11 @@ allowed-tools: Bash,Write,Read
 
 ## 本地 / cron
 
-现有 crontab 调用本地 launcher：
+本地 launcher 需要外部注入内容根（Broker 场景由 openmind-app 自动注入）：
 
 ```bash
-cd /home/say/work/github/cctools
-uv run --project ../rss-article-saver \
-  --env-file ../rss-article-saver/.env \
-  python ../rss-to-summary-workflow/scripts/run_workflow.py \
+export OPENMIND_ROOT=<用户在 openmind-app 选择的数据根>   # 旧名 OPENMIND_ROOT 仍被接受
+uv run --project rss-article-saver python rss-to-summary-workflow/scripts/run_workflow.py \
   --workflow rss-to-summary
 ```
 
@@ -61,11 +59,10 @@ python scripts/run_workflow.py --dry-run --workflow rss-to-summary
 | `scripts/run_workflow.py` | 本地/cron 入口 |
 | `SKILL.md` | Agent / 人类说明 |
 
-本地 launcher 可沿仓库祖先解析 skill 路径并使用各子 skill 自己的 `.env`；
-若未设置环境变量，会自动注入：
-
-- `CCTOOLS_MYMIND_ROOT=<repo>/mymind`
-- `CCTOOLS_SKILL_DATA_DIR=<各子 skill 目录>`（沿用 skill 目录内既有 cache）
+本地 launcher 可沿仓库祖先解析 skill 路径并使用各子 skill 自己的 `.env`
+（仅当该文件存在时加载）；内容根由外部注入的 `OPENMIND_ROOT` 提供，
+未设置时各步骤直接报错停止。`OPENMIND_SKILL_DATA_DIR` 未设置时默认为
+各子 skill 目录（沿用 skill 目录内既有 cache）。
 
 桌面端不读取工作区 `.env`，不沿源码祖先推断内容根，由 Broker 注入同样绑定。
 

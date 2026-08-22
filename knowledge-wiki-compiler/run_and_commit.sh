@@ -2,19 +2,16 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# 内容仓库（cctools）：优先显式绑定，其次从 mymind 根推导。
-REPO_ROOT="${CCTOOLS_REPO_ROOT:-}"
-if [[ -z "$REPO_ROOT" ]]; then
-  if [[ -n "${CCTOOLS_MYMIND_ROOT:-}" ]]; then
-    REPO_ROOT="$(cd "$CCTOOLS_MYMIND_ROOT/.." && pwd)"
-  else
-    echo "run_and_commit.sh: 需要设置 CCTOOLS_REPO_ROOT 或 CCTOOLS_MYMIND_ROOT（指向 cctools 仓库）" >&2
-    exit 1
-  fi
+# 内容根：用户在 openmind-app 选择的数据根，即数据仓根本身（扁平布局，无 mymind/ 层）。
+# 旧名 CCTOOLS_MYMIND_ROOT 仍被接受。auto-commit 已移除，产出经 openmind-app 或手动提交。
+CONTENT_ROOT="${OPENMIND_ROOT:-${CCTOOLS_MYMIND_ROOT:-}}"
+if [[ -z "$CONTENT_ROOT" ]]; then
+  echo "run_and_commit.sh: 需要设置 OPENMIND_ROOT 或 CCTOOLS_MYMIND_ROOT（指向数据仓根）" >&2
+  exit 1
 fi
 LOG_DIR="$ROOT_DIR/logs"
 TARGET_DATE=""
-MYMIND_ROOT="${CCTOOLS_MYMIND_ROOT:-$REPO_ROOT/mymind}"
+CONTENT_ARG="$CONTENT_ROOT"
 SKILL_DATA_DIR="$ROOT_DIR/data"
 PASSTHROUGH_ARGS=()
 
@@ -72,16 +69,16 @@ while [[ $# -gt 0 ]]; do
       PASSTHROUGH_ARGS+=("$1")
       shift
       ;;
-    --mymind-root)
+    --content-root|--mymind-root)
       if [[ $# -lt 2 ]]; then
-        echo "--mymind-root requires a value" >&2
+        echo "--content-root requires a value" >&2
         exit 1
       fi
-      MYMIND_ROOT="$2"
+      CONTENT_ARG="$2"
       shift 2
       ;;
-    --mymind-root=*)
-      MYMIND_ROOT="${1#*=}"
+    --content-root=*|--mymind-root=*)
+      CONTENT_ARG="${1#*=}"
       shift
       ;;
     --skill-data-dir)
@@ -114,10 +111,6 @@ mkdir -p "$SKILL_DATA_DIR"
 
 cd "$ROOT_DIR"
 "$UV_BIN" run python main.py \
-  --mymind-root "$MYMIND_ROOT" \
+  --content-root "$CONTENT_ARG" \
   --skill-data-dir "$SKILL_DATA_DIR" \
   "${PASSTHROUGH_ARGS[@]}"
-
-"$REPO_ROOT/scripts/auto_commit_paths.sh" \
-  "chore(knowledge-wiki-compiler): refresh wiki ${TARGET_DATE}" \
-  "mymind/wiki"

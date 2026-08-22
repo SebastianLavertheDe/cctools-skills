@@ -7,7 +7,7 @@ publisher:
 kind: workflow
 display:
   name: RSS 到每日总结
-  description: 按同一个 mymind root snapshot 依次执行 RSS 采集、文章总结和每日选题筛选。
+  description: 按同一个内容根快照依次执行 RSS 采集、文章总结和每日选题筛选。
   group: 内容链路
 inputs:
   type: object

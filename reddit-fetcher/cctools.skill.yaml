@@ -7,7 +7,7 @@ publisher:
 kind: process
 display:
   name: Reddit 内容抓取
-  description: 抓取配置的 Reddit 热门内容并保存到 mymind/reddit。
+  description: 抓取配置的 Reddit 热门内容并保存到 reddit/（相对内容根）。
   group: 采集
 entrypoint:
   runtime: python

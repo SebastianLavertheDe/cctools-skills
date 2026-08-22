@@ -1,8 +1,8 @@
 # RSS Article Configuration
 # article_base_dir: output directory for saved articles. Supports ~ and relative paths.
-#   - Absolute: "/home/user/cctools/mymind/article" or "C:\\Users\\user\\cctools\\mymind\\article"
-#   - Relative: resolved relative to this config file's directory
-#   - Default (empty): auto-detects project root (requires standard directory layout)
+#   - Absolute: any user-selected content root, e.g. "/home/<you>/openmind/article"
+#   - Relative: resolved against the bound content root ($OPENMIND_ROOT)
+#   - Default (empty): resolved against the bound content root ($OPENMIND_ROOT)
 article_base_dir: ""
 opml_file: "subscriptions.opml"
 max_articles_per_feed: 1
@@ -26,7 +26,7 @@ content:
       Upgrade-Insecure-Requests: "1"
 ai:
   # AI provider 由仓库根 config/providers.yaml 的 default 决定
-  # （desktop 注入 CCTOOLS_PROVIDER_* 或 crontab 自读 YAML）；此处不配置 provider。
+  # （desktop 注入 OPENMIND_PROVIDER_* 或 crontab 自读 YAML）；此处不配置 provider。
   enabled: false
   summarize_full_content: true
   categories:

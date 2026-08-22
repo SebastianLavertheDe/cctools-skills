@@ -2,7 +2,7 @@
 
 Save as:
 
-`mymind/creative/01-内容生产/选题管理/ai_topic_YYYY-MM-DD.md`
+`creative/01-内容生产/选题管理/ai_topic_YYYY-MM-DD.md`
 
 Use this structure exactly.
 
@@ -16,7 +16,7 @@ Tone requirements for all prose fields:
 # AI 自媒体每日选题 - YYYY-MM-DD
 
 > 生成时间：YYYY-MM-DD HH:MM
-> 资料来源：手动输入 / 本地 mymind / 混合（仅在用户显式允许联网时包含公开网络）
+> 资料来源：手动输入 / 本地知识库 / 混合（仅在用户显式允许联网时包含公开网络）
 > 风险提示：本文档用于选题判断，不把未确认消息当事实。
 
 ## 1. 今日最终推荐

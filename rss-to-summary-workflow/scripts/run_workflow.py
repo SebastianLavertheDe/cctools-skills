@@ -40,6 +40,28 @@ def _resolve_command(command: list[str]) -> list[str]:
             command = [resolved] + command[1:]
     return command
 
+
+def _drop_missing_env_files(command: list[str], skill_path: Path) -> list[str]:
+    """Remove `--env-file <path>` pairs whose file is absent.
+
+    uv fails hard on missing env files and installed skill copies never ship
+    one; keep the pair only when the file actually exists.
+    """
+    sanitized: list[str] = []
+    i = 0
+    while i < len(command):
+        if command[i] == "--env-file" and i + 1 < len(command):
+            env_file = Path(command[i + 1]).expanduser()
+            if not env_file.is_absolute():
+                env_file = skill_path / env_file
+            if env_file.exists():
+                sanitized.extend(command[i:i + 2])
+            i += 2
+            continue
+        sanitized.append(command[i])
+        i += 1
+    return sanitized
+
 try:
     import yaml  # type: ignore
 except Exception:  # pragma: no cover - optional dependency
@@ -133,19 +155,19 @@ def _run_step(
     exit_code = 0
 
     try:
-        resolved_command = _resolve_command(command)
+        resolved_command = _drop_missing_env_files(_resolve_command(command), skill_path)
         # Local/cron path: child skills require Broker-style bindings.
-        # mymind 根必须由外部注入（crontab 或手动运行时设置
-        # CCTOOLS_MYMIND_ROOT）；skills 仓库不再内嵌 mymind，无法推导。
+        # 内容根必须由外部注入（crontab 或手动运行时设置 OPENMIND_ROOT，
+        # 旧名 CCTOOLS_MYMIND_ROOT 仍被接受）；skills 仓库不内嵌数据，无法推导。
         env = os.environ.copy()
-        if not (env.get("CCTOOLS_MYMIND_ROOT") or env.get("MYMIND_ROOT")):
+        if not (env.get("OPENMIND_ROOT") or env.get("CCTOOLS_MYMIND_ROOT")):
             print(
-                "  Error: CCTOOLS_MYMIND_ROOT is not set; point it at the "
-                "mymind data root (e.g. <cctools>/mymind)"
+                "  Error: OPENMIND_ROOT is not set; point it at the "
+                "user-selected openmind content root (repo root, flat layout)"
             )
             return False
-        if not env.get("CCTOOLS_SKILL_DATA_DIR"):
-            env["CCTOOLS_SKILL_DATA_DIR"] = str(skill_path)
+        if not env.get("OPENMIND_SKILL_DATA_DIR"):
+            env["OPENMIND_SKILL_DATA_DIR"] = str(skill_path)
         completed = subprocess.run(
             resolved_command,
             cwd=str(skill_path),

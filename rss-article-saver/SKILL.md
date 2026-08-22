@@ -2,7 +2,7 @@
 name: rss-article-saver
 description: RSS article subscription, saves articles as local Markdown
 allowed-tools: Bash,Write,Read
-# desktop-app 执行配置
+# openmind-app 执行配置
 title: RSS 文章抓取
 group: 采集
 cwd: rss-article-saver
@@ -16,14 +16,14 @@ args:
 envFile: .env
 permission: edit
 outputArtifacts:
-  - mymind/article/${date}/
+  - article/${date}/
 timeoutMs: 7200000
 ---
 
 Desktop App contract: use `cctools.skill.yaml` as the runnable contract.
-Article/post output is resolved below `CCTOOLS_MYMIND_ROOT`, while cache and
-counter state are below `CCTOOLS_SKILL_DATA_DIR`; Provider Profile values
-arrive through neutral `CCTOOLS_PROVIDER_*` bindings. AI adapters are
+Article/post output is resolved below `OPENMIND_ROOT`, while cache and
+counter state are below `OPENMIND_SKILL_DATA_DIR`; Provider Profile values
+arrive through neutral `OPENMIND_PROVIDER_*` bindings. AI adapters are
 vendored inside this Skill's `src/` package and do not import the workspace
 `_shared` directory.
 
@@ -34,7 +34,7 @@ Subscribes to RSS feeds (configured via OPML) and saves articles as local Markdo
 ## Features
 
 - 📡 **RSS Support**: Subscribe to feeds via OPML file
-- 📝 **Markdown Export**: Saves articles as Markdown with embedded images to `mymind/article/` under the project root
+- 📝 **Markdown Export**: Saves articles as Markdown with embedded images to `article/` under the project root
 - 🔄 **Deduplication**: Skips already processed articles using cache
 - 🖼️ **Image Support**: Extracts and includes article images
 
@@ -43,7 +43,7 @@ Subscribes to RSS feeds (configured via OPML) and saves articles as local Markdo
 ```bash
 cd /path/to/cctools-skills/rss-article-saver
 uv sync
-uv run --env-file .env python main.py
+uv run --env-file .env python main.py        # --env-file 仅当 .env 存在时使用
 ```
 
 ## Configuration
@@ -92,7 +92,7 @@ The AI provider itself is configured in `config/providers.yaml` (repo root), not
 
 ### Saved Articles
 
-Articles are saved to `mymind/article/` under the project root as Markdown files:
+Articles are saved to `article/` under the project root as Markdown files:
 ```
 YYYYMMDD_HHMMSS_Article Title.md
 ```

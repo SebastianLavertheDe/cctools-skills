@@ -1,8 +1,8 @@
 ---
 name: knowledge-wiki-compiler
-description: Incrementally compile raw knowledge sources from `mymind/article` and `mymind/post` into a structured Markdown wiki under `mymind/wiki`. Use when Codex needs to build concept pages, theme pages, indexes, and lint reports over the local corpus.
+description: Incrementally compile raw knowledge sources from `article` and `post` into a structured Markdown wiki under `wiki`. Use when Codex needs to build concept pages, theme pages, indexes, and lint reports over the local corpus.
 allowed-tools: Bash,Write,Read
-# desktop-app 执行配置
+# openmind-app 执行配置
 title: 知识库编译
 group: 分析
 cwd: knowledge-wiki-compiler
@@ -13,13 +13,13 @@ args:
   - main.py
 permission: edit
 outputArtifacts:
-  - mymind/wiki/
+  - wiki/
 timeoutMs: 3600000
 ---
 
 Desktop App contract: use `cctools.skill.yaml` as the runnable contract.
-`mymindRoot` is supplied by `CCTOOLS_MYMIND_ROOT`; compiler state is stored
-below `CCTOOLS_SKILL_DATA_DIR`. The compiler does not read another Skill's
+`mymindRoot` is supplied by `OPENMIND_ROOT`; compiler state is stored
+below `OPENMIND_SKILL_DATA_DIR`. The compiler does not read another Skill's
 `.env` file. Its AI adapter is vendored inside the installed Python package
 and does not import the workspace `_shared` directory.
 
@@ -27,20 +27,20 @@ and does not import the workspace `_shared` directory.
 
 Builds a local Markdown knowledge base from the raw source layer:
 
-- `mymind/article/`: long-form raw articles
-- `mymind/post/`: social/timeline raw captures
+- `article/`: long-form raw articles
+- `post/`: social/timeline raw captures
 
 The compiler writes a structured wiki to:
 
-- `mymind/wiki/themes/` — reading navigation (broad topics)
-- `mymind/wiki/concepts/` — glossary-style method/term pages
-- `mymind/wiki/sources/posts/` — lightweight notes for X post batches only
-- `mymind/wiki/index/` — browse indexes; `emerging.md` links to `_state/review/` queues
-- `mymind/wiki/_state/` — registry metadata (tags, summaries) for all sources
+- `wiki/themes/` — reading navigation (broad topics)
+- `wiki/concepts/` — glossary-style method/term pages
+- `wiki/sources/posts/` — lightweight notes for X post batches only
+- `wiki/index/` — browse indexes; `emerging.md` links to `_state/review/` queues
+- `wiki/_state/` — registry metadata (tags, summaries) for all sources
 
 Legacy empty dirs (`entities/`, `emerging/`, `domains/`, `families/`) are no longer created when entities are disabled.
 
-Article metadata lives in `_state/registry.json`. Theme/concept pages link directly to `mymind/article/` (`generate_source_notes: false`).
+Article metadata lives in `_state/registry.json`. Theme/concept pages link directly to `article/` (`generate_source_notes: false`).
 
 Entity pages are **disabled by default** (`generate_entities: false`). When disabled, the compiler skips entity extraction, entity lifecycle state, and entity review artifacts.
 
@@ -70,7 +70,7 @@ uv run python main.py --only-taxonomy   # rebuild theme/concept pages from exist
 - **Overlap rule**: when a name exists as both theme and concept, **theme wins** — no duplicate concept page.
 - **Simple pages** (`simple_group_pages: true`): template pages with overview + article links; no AI group summaries.
 
-Manual overrides live in `mymind/wiki/_state/taxonomy_decisions.yaml`:
+Manual overrides live in `wiki/_state/taxonomy_decisions.yaml`:
 
 ```yaml
 merge:

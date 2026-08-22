@@ -26,7 +26,7 @@ inputs:
   properties:
     source:
       type: string
-      description: mymind/daily-summary 下待整理的 Markdown 文件。
+      description: daily-summary/ 下待整理的 Markdown 文件（相对内容根）。
 config: {}
 capabilities:
   mymind:

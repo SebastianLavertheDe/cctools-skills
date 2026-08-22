@@ -203,15 +203,15 @@ def _collect_existing_article_tweet_ids(article_root: Path) -> set[str]:
 
 
 def _skill_dir() -> Path:
-    configured = os.environ.get("CCTOOLS_SKILL_HOME", "").strip()
+    configured = (os.environ.get("OPENMIND_SKILL_HOME") or os.environ.get("CCTOOLS_SKILL_HOME") or "").strip()
     return Path(configured).expanduser().resolve() if configured else Path(__file__).resolve().parents[2]
 
 
 def _external_article_log_path() -> Path:
-    data_dir = os.environ.get("CCTOOLS_SKILL_DATA_DIR", "").strip()
+    data_dir = (os.environ.get("OPENMIND_SKILL_DATA_DIR") or os.environ.get("CCTOOLS_SKILL_DATA_DIR") or "").strip()
     if data_dir:
         return Path(data_dir).expanduser().resolve() / "external_article_fetch.log"
-    return Path(tempfile.gettempdir()) / "cctools-x-following-fetcher" / "external_article_fetch.log"
+    return Path(tempfile.gettempdir()) / "openmind-x-following-fetcher" / "external_article_fetch.log"
 
 
 def _log_external_article_event(message: str) -> None:
@@ -233,10 +233,13 @@ def _log_external_article_event(message: str) -> None:
 
 
 def _helper_python(skill_dir: Path) -> str:
-    """Prefer the skill venv so cron via /usr/bin/python3 still has deps."""
-    venv_python = skill_dir / ".venv" / "bin" / "python"
-    if venv_python.exists():
-        return str(venv_python)
+    """Prefer the skill venv so cron via a system interpreter still has deps."""
+    for candidate in (
+        skill_dir / ".venv" / "bin" / "python",          # POSIX venv layout
+        skill_dir / ".venv" / "Scripts" / "python.exe",  # Windows venv layout
+    ):
+        if candidate.exists():
+            return str(candidate)
     return sys.executable
 
 
@@ -262,7 +265,9 @@ def _extract_external_articles(links: list[str]) -> dict[str, dict[str, object]]
             env={
                 **os.environ,
                 # Keep Broker/local bindings visible to the helper process.
+                "OPENMIND_ROOT": os.environ.get("OPENMIND_ROOT", ""),
                 "CCTOOLS_MYMIND_ROOT": os.environ.get("CCTOOLS_MYMIND_ROOT", ""),
+                "OPENMIND_SKILL_DATA_DIR": os.environ.get("OPENMIND_SKILL_DATA_DIR", ""),
                 "CCTOOLS_SKILL_DATA_DIR": os.environ.get(
                     "CCTOOLS_SKILL_DATA_DIR", str(skill_dir)
                 ),

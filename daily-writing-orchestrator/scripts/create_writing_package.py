@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from runtime_paths import RuntimePathError, relative_mymind_path, require_mymind_root, resolve_mymind_path
+from runtime_paths import RuntimePathError, relative_content_path, require_content_root, resolve_content_path
 
 TOPIC_DIR_RELATIVE = Path("creative/01-内容生产/选题管理")
 OUTPUT_ROOT_RELATIVE = Path("creative/01-内容生产/文稿库/02-制作中")
@@ -249,7 +249,7 @@ def write_topic_brief(
     topic_file: Path,
     selected: Dict[str, object],
     platforms: List[str],
-    mymind_root: Path,
+    content_root: Path,
 ) -> None:
     final_section = str(selected.get("final_section") or "")
     title = str(selected["title"])
@@ -266,7 +266,7 @@ def write_topic_brief(
 date: {date_dash}
 topic: "{title}"
 status: brief_ready
-source_topic_file: "{relative_mymind_path(topic_file, mymind_root)}"
+source_topic_file: "{relative_content_path(topic_file, content_root)}"
 platforms: {json.dumps(platforms, ensure_ascii=False)}
 risk_level: tbd
 ---
@@ -379,7 +379,7 @@ def write_platform_task(
     platform: str,
     topic_file: Path,
     package_dir: Path,
-    mymind_root: Path,
+    content_root: Path,
 ) -> None:
     platform_name = {
         "xiaohongshu": "小红书",
@@ -396,9 +396,9 @@ date: {date_dash}
 topic: "{topic}"
 platform: {platform}
 status: task_ready
-source_topic_file: "{relative_mymind_path(topic_file, mymind_root)}"
-topic_brief: "{relative_mymind_path(package_dir / 'topic-brief.md', mymind_root)}"
-asset_manifest: "{relative_mymind_path(package_dir / 'manifest.json', mymind_root)}"
+source_topic_file: "{relative_content_path(topic_file, content_root)}"
+topic_brief: "{relative_content_path(package_dir / 'topic-brief.md', content_root)}"
+asset_manifest: "{relative_content_path(package_dir / 'manifest.json', content_root)}"
 risk_level: tbd
 ---
 
@@ -472,7 +472,7 @@ def write_manifest(
     platforms: List[str],
     with_assets: bool,
     review: bool,
-    mymind_root: Path,
+    content_root: Path,
 ) -> None:
     platform_states = {
         platform: "task_ready" if platform in platforms else "not_requested"
@@ -481,8 +481,8 @@ def write_manifest(
     manifest = {
         "date": date_dash,
         "topic": selected["title"],
-        "source_topic_file": relative_mymind_path(topic_file, mymind_root),
-        "package_dir": relative_mymind_path(package_dir, mymind_root),
+        "source_topic_file": relative_content_path(topic_file, content_root),
+        "package_dir": relative_content_path(package_dir, content_root),
         "selection": {
             "mode": selected.get("mode"),
             "topic_index": selected.get("topic_index"),
@@ -511,7 +511,7 @@ def main() -> None:
     parser.add_argument("--topic-index", type=int, default=0, help="1-based row from 今日候选热点池.")
     parser.add_argument("--topic-file", default="", help="Override ai_topic file path.")
     parser.add_argument("--output-root", default="", help="Override package output root.")
-    parser.add_argument("--mymind-root", default="", help="Explicit mymind root; defaults to CCTOOLS_MYMIND_ROOT.")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
     parser.add_argument("--skill-data-dir", default="", help="Reserved app-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="Reserved app-private Run working directory.")
     parser.add_argument("--with-assets", action="store_true", help="Mark asset collection as pending after drafts.")
@@ -519,8 +519,8 @@ def main() -> None:
     args = parser.parse_args()
     topic_keyword = args.topic.strip()
     try:
-        mymind_root = require_mymind_root(args.mymind_root)
-        output_root = resolve_mymind_path(args.output_root, mymind_root, "--output-root") if args.output_root else mymind_root / OUTPUT_ROOT_RELATIVE
+        content_root = require_content_root(args.content_root)
+        output_root = resolve_content_path(args.output_root, content_root, "--output-root") if args.output_root else content_root / OUTPUT_ROOT_RELATIVE
     except RuntimePathError as exc:
         parser.error(str(exc))
 
@@ -528,7 +528,7 @@ def main() -> None:
     topic_file_provided = bool(args.topic_file.strip())
     if topic_file_provided:
         topic_file = Path(args.topic_file)
-        topic_file = resolve_mymind_path(args.topic_file, mymind_root, "--topic-file")
+        topic_file = resolve_content_path(args.topic_file, content_root, "--topic-file")
         parsed = parse_topic_file_date(topic_file)
         if date_provided:
             date_compact, date_dash = normalize_date(args.date)
@@ -538,7 +538,7 @@ def main() -> None:
             date_compact, date_dash = normalize_date("")
     else:
         date_compact, date_dash = normalize_date(args.date)
-        topic_file = mymind_root / TOPIC_DIR_RELATIVE / f"ai_topic_{date_dash}.md"
+        topic_file = content_root / TOPIC_DIR_RELATIVE / f"ai_topic_{date_dash}.md"
 
     if not topic_file.exists():
         raise FileNotFoundError(f"AI topic file not found: {topic_file}")
@@ -552,7 +552,7 @@ def main() -> None:
     for subdir in ["assets/sources", "assets/covers", "assets/cards"]:
         (package_dir / subdir).mkdir(parents=True, exist_ok=True)
 
-    write_topic_brief(package_dir / "topic-brief.md", date_dash, topic_file, selected, platforms, mymind_root)
+    write_topic_brief(package_dir / "topic-brief.md", date_dash, topic_file, selected, platforms, content_root)
 
     task_paths = {
         "xiaohongshu": package_dir / "xiaohongshu-draft.md",
@@ -560,7 +560,7 @@ def main() -> None:
         "twitter": package_dir / "twitter-thread.md",
     }
     for platform in platforms:
-        write_platform_task(task_paths[platform], date_dash, str(selected["title"]), platform, topic_file, package_dir, mymind_root)
+        write_platform_task(task_paths[platform], date_dash, str(selected["title"]), platform, topic_file, package_dir, content_root)
 
     write_manifest(
         package_dir / "manifest.json",
@@ -571,7 +571,7 @@ def main() -> None:
         platforms,
         args.with_assets,
         args.review,
-        mymind_root,
+        content_root,
     )
     if args.review:
         write_review_placeholder(package_dir / "review.md", str(selected["title"]))

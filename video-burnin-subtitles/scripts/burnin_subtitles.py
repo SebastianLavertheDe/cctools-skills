@@ -55,10 +55,10 @@ def run(command: list[str], *, cwd: Path | None = None, capture: bool = False) -
         raise BurninError(f"Command failed ({exc.returncode}): {command[0]} {detail[:800]}") from exc
 
 
-def resolve_mymind_root() -> Path:
-    raw = (os.environ.get("CCTOOLS_MYMIND_ROOT") or os.environ.get("MYMIND_ROOT") or "").strip()
+def resolve_content_root() -> Path:
+    raw = (os.environ.get("OPENMIND_ROOT") or os.environ.get("CCTOOLS_MYMIND_ROOT") or "").strip()
     if not raw:
-        raise BurninError("CCTOOLS_MYMIND_ROOT is required and must point to an existing mymind root.")
+        raise BurninError("OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT) is required and must point to an existing content root.")
     root = Path(raw).expanduser()
     if not root.is_dir():
         raise BurninError(f"Mymind root does not exist or is not a directory: {root}")
@@ -231,8 +231,8 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     try:
-        mymind_root = resolve_mymind_root()
-        output_root = mymind_root / "video"
+        content_root = resolve_content_root()
+        output_root = content_root / "video"
         output_root.mkdir(parents=True, exist_ok=True)
         video, workdir = acquire_video(args.source, args.language, args.output_name, output_root)
         subtitle = prepare_subtitle(video, workdir, args.language, args.subtitle_file)

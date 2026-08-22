@@ -7,15 +7,15 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from runtime_paths import RuntimePathError, optional_run_dir, require_mymind_root
+from runtime_paths import RuntimePathError, optional_run_dir, require_content_root
 
 MYMIND: Path | None = None
 RUN_DIR: Path | None = None
 
 
-def configure_paths(mymind_root: Path, run_dir: Path | None) -> None:
+def configure_paths(content_root: Path, run_dir: Path | None) -> None:
     global MYMIND, RUN_DIR
-    MYMIND = mymind_root
+    MYMIND = content_root
     RUN_DIR = run_dir
 
 
@@ -325,12 +325,12 @@ CHECKS = [
 def main():
     parser = argparse.ArgumentParser(description="Report installed Skill run status for a given date.")
     parser.add_argument("date", nargs="?", default=yesterday_str(), help="Date in YYYYMMDD format.")
-    parser.add_argument("--mymind-root", default="", help="Explicit mymind root; defaults to CCTOOLS_MYMIND_ROOT.")
-    parser.add_argument("--run-dir", default="", help="App-private Run directory; defaults to CCTOOLS_RUN_DIR.")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
+    parser.add_argument("--run-dir", default="", help="App-private Run directory; defaults to OPENMIND_RUN_DIR (legacy alias CCTOOLS_RUN_DIR).")
     parser.add_argument("--skill-data-dir", default="", help="Reserved app-private Skill data directory.")
     args = parser.parse_args()
     try:
-        configure_paths(require_mymind_root(args.mymind_root), optional_run_dir(args.run_dir))
+        configure_paths(require_content_root(args.content_root), optional_run_dir(args.run_dir))
     except RuntimePathError as exc:
         parser.error(str(exc))
     date_str = args.date

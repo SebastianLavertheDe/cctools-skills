@@ -9,7 +9,7 @@ from .fetcher.client import FetchError, fetch_timelines
 from .parser.timeline import parse_timeline_payload
 from .storage.cache import PostCache
 from .storage.files import save_new_tweets
-from .runtime_paths import RuntimePathError, optional_run_dir, require_skill_data_dir, require_mymind_root
+from .runtime_paths import RuntimePathError, optional_run_dir, require_skill_data_dir, require_content_root
 
 
 def _ensure_local_cron_bindings() -> None:
@@ -19,19 +19,16 @@ def _ensure_local_cron_bindings() -> None:
     ``python3 .../main.py`` with neither CLI flags nor env vars.
     """
     skill_dir = Path(__file__).resolve().parents[1]
-    if not os.environ.get("CCTOOLS_SKILL_DATA_DIR"):
+    if not (os.environ.get("OPENMIND_SKILL_DATA_DIR") or os.environ.get("CCTOOLS_SKILL_DATA_DIR")):
         os.environ["CCTOOLS_SKILL_DATA_DIR"] = str(skill_dir)
-    repo_root = None
+    # Installed copies live at <content-root>/.agent/skills/cctools/<skill>/;
+    # the ancestor carrying the app-managed .agent/skills store is the
+    # user-selected content root itself (flat layout, no mymind/ layer).
     for parent in [skill_dir, *skill_dir.parents]:
-        if parent.name == ".claude":
-            repo_root = parent.parent
+        if (parent / ".agent" / "skills").is_dir():
+            if not (os.environ.get("OPENMIND_ROOT") or os.environ.get("CCTOOLS_MYMIND_ROOT")):
+                os.environ["OPENMIND_ROOT"] = str(parent)
             break
-    if repo_root is None:
-        return
-    if not (os.environ.get("CCTOOLS_MYMIND_ROOT") or os.environ.get("MYMIND_ROOT")):
-        mymind = repo_root / "mymind"
-        if mymind.is_dir():
-            os.environ["CCTOOLS_MYMIND_ROOT"] = str(mymind)
 
 
 def run() -> int:
@@ -39,13 +36,13 @@ def run() -> int:
 
     parser = argparse.ArgumentParser(description="Fetch X following posts into the bound mymind root.")
     parser.add_argument("--config", default="", help="Package config path; defaults to config.yaml inside this Skill.")
-    parser.add_argument("--mymind-root", default="", help="Explicit mymind root; defaults to CCTOOLS_MYMIND_ROOT.")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
     parser.add_argument("--skill-data-dir", default="", help="App-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="App-private Run working directory.")
     args = parser.parse_args()
     try:
         _ensure_local_cron_bindings()
-        root = require_mymind_root(args.mymind_root)
+        root = require_content_root(args.content_root)
         data_dir = require_skill_data_dir(args.skill_data_dir)
         optional_run_dir(args.run_dir)
         config_path = Path(args.config).expanduser() if args.config else None

@@ -2,7 +2,8 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$ROOT_DIR/../../.." && pwd)"
+# 内容根由子进程从环境读取（OPENMIND_ROOT，旧名 CCTOOLS_MYMIND_ROOT）。
+# auto-commit 已移除，产出经 openmind-app 或手动提交。
 START_DATE="${1:-20260209}"
 END_DATE="${2:-20260409}"
 
@@ -59,6 +60,4 @@ else
   COMMIT_DATE_LABEL="${START_DATE}-${END_DATE}"
 fi
 
-"$REPO_ROOT/scripts/auto_commit_paths.sh" \
-  "chore(knowledge-wiki-compiler): refresh wiki ${COMMIT_DATE_LABEL}" \
-  "mymind/wiki"
+echo "[run_compile_range] done: ${COMMIT_DATE_LABEL} (auto-commit 已移除，请经 openmind-app 或手动提交)"

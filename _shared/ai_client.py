@@ -107,7 +107,7 @@ def resolve_provider() -> AIProvider:
 
     raise ValueError(
         "No AI provider configured. Configure config/providers.yaml "
-        "(default provider) or run via desktop-app (CCTOOLS_PROVIDER_*)."
+        "(default provider) or run via openmind-app (OPENMIND_PROVIDER_*)."
     )
 
 
@@ -121,7 +121,7 @@ def build_providers() -> list[AIProvider]:
 
     raise ValueError(
         "No AI provider configured. Configure config/providers.yaml "
-        "(default provider) or run via desktop-app (CCTOOLS_PROVIDER_*)."
+        "(default provider) or run via openmind-app (OPENMIND_PROVIDER_*)."
     )
 
 
@@ -133,14 +133,14 @@ def _resolve_bound_provider() -> AIProvider | None:
     Returning ``None`` keeps the legacy CLI fallback usable for development,
     while production manifests always provide the neutral variables.
     """
-    api_key = os.getenv("CCTOOLS_PROVIDER_API_KEY", "").strip()
+    api_key = (os.getenv("OPENMIND_PROVIDER_API_KEY") or os.getenv("CCTOOLS_PROVIDER_API_KEY") or "").strip()
     if not api_key:
-        if os.getenv("CCTOOLS_MANAGED_RUN", "").strip() == "1":
+        if (os.getenv("OPENMIND_MANAGED_RUN") or os.getenv("CCTOOLS_MANAGED_RUN") or "").strip() == "1":
             raise ValueError("Managed Run requires a bound Provider Profile Credential.")
         return None
-    base_url = os.getenv("CCTOOLS_PROVIDER_BASE_URL", "").strip()
-    model = os.getenv("CCTOOLS_PROVIDER_MODEL", "").strip()
-    protocol = os.getenv("CCTOOLS_PROVIDER_PROTOCOL", "provider-native").strip().lower()
+    base_url = (os.getenv("OPENMIND_PROVIDER_BASE_URL") or os.getenv("CCTOOLS_PROVIDER_BASE_URL") or "").strip()
+    model = (os.getenv("OPENMIND_PROVIDER_MODEL") or os.getenv("CCTOOLS_PROVIDER_MODEL") or "").strip()
+    protocol = (os.getenv("OPENMIND_PROVIDER_PROTOCOL") or os.getenv("CCTOOLS_PROVIDER_PROTOCOL") or "provider-native").strip().lower()
     if not base_url or not model:
         raise ValueError("Bound Provider Profile must provide base URL and model")
     if protocol == "anthropic-messages":
@@ -155,9 +155,9 @@ def _resolve_bound_provider() -> AIProvider | None:
         model=model,
         api_key=api_key,
         kind=kind,
-        proxy_url=os.getenv("CCTOOLS_PROVIDER_PROXY_URL", "").strip(),
-        proxy_policy=os.getenv("CCTOOLS_PROVIDER_PROXY_POLICY", "system").strip().lower(),
-        tls_policy=os.getenv("CCTOOLS_PROVIDER_TLS_POLICY", "verify").strip().lower(),
+        proxy_url=(os.getenv("OPENMIND_PROVIDER_PROXY_URL") or os.getenv("CCTOOLS_PROVIDER_PROXY_URL") or "").strip(),
+        proxy_policy=(os.getenv("OPENMIND_PROVIDER_PROXY_POLICY") or os.getenv("CCTOOLS_PROVIDER_PROXY_POLICY") or "system").strip().lower(),
+        tls_policy=(os.getenv("OPENMIND_PROVIDER_TLS_POLICY") or os.getenv("CCTOOLS_PROVIDER_TLS_POLICY") or "verify").strip().lower(),
     )
 
 
@@ -169,7 +169,7 @@ def _providers_yaml_path() -> Path | None:
     ``config/providers.yaml``. Returns ``None`` when nothing matches so callers
     can fall back to legacy per-provider env vars.
     """
-    env_path = os.getenv("CCTOOLS_PROVIDERS_FILE", "").strip()
+    env_path = (os.getenv("OPENMIND_PROVIDERS_FILE") or os.getenv("CCTOOLS_PROVIDERS_FILE") or "").strip()
     if env_path:
         candidate = Path(env_path).expanduser()
         return candidate if candidate.exists() else None

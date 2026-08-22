@@ -29,7 +29,7 @@ inputs:
   properties:
     draftDir:
       type: string
-      description: mymind/creative 下待处理的创作包目录。
+      description: creative/ 下待处理的创作包目录（相对内容根）。
     date:
       type: string
       format: compact-date

@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from .runtime_paths import require_skill_data_dir, require_mymind_root, resolve_bound_path
+from .runtime_paths import require_skill_data_dir, require_content_root, resolve_bound_path
 
 
 def _parse_scalar(raw_value: str) -> Any:
@@ -153,11 +153,11 @@ def _resolve_path(base_dir: Path, raw_path: str, default_path: Path) -> Path:
 
 def load_config(
     config_path: Path | None = None,
-    mymind_root: str | Path | None = None,
+    content_root: str | Path | None = None,
     skill_data_dir: str | Path | None = None,
 ) -> AppConfig:
     skill_dir = Path(__file__).resolve().parents[1]
-    root = require_mymind_root(str(mymind_root) if mymind_root is not None else None)
+    root = require_content_root(str(content_root) if content_root is not None else None)
     data_dir = require_skill_data_dir(str(skill_data_dir) if skill_data_dir is not None else None)
     config_path = config_path or Path(
         os.environ.get("X_FETCHER_CONFIG", skill_dir / "config.yaml")
@@ -190,7 +190,7 @@ def load_config(
         try:
             resolved.relative_to(root)
         except ValueError as exc:
-            raise ValueError(f"{label} must stay inside mymind root: {raw_path}") from exc
+            raise ValueError(f"{label} must stay inside the content root: {raw_path}") from exc
         return resolved
 
     storage = StorageConfig(

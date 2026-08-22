@@ -34,3 +34,7 @@ curl.txt
 curl_foryou.txt
 x_curl.txt
 x_curl_*.txt
+
+# 运行时状态文件（含历史绝对路径，不入库）
+posted_ids.json
+*.log

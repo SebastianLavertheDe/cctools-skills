@@ -5,7 +5,7 @@ from pathlib import Path
 
 import yaml
 
-from .runtime_paths import require_skill_data_dir, require_mymind_root, resolve_bound_path
+from .runtime_paths import require_skill_data_dir, require_content_root, resolve_bound_path
 
 
 @dataclass(frozen=True)
@@ -38,7 +38,7 @@ class AppConfig:
 
 def load_config(
     config_path: str = "config.yaml",
-    mymind_root: str | None = None,
+    content_root: str | None = None,
     skill_data_dir: str | None = None,
 ) -> AppConfig:
     config_abs = Path(config_path).expanduser().resolve()
@@ -48,10 +48,10 @@ def load_config(
     fetch_raw = raw.get("fetch", {})
     storage_raw = raw.get("storage", {})
 
-    root = require_mymind_root(mymind_root)
+    root = require_content_root(content_root)
     data_dir = require_skill_data_dir(skill_data_dir)
 
-    # Default output_dir: <mymind_root>/reddit
+    # Default output_dir: <content_root>/reddit
     output_dir_raw = storage_raw.get("output_dir", "")
     if output_dir_raw:
         output_dir = resolve_bound_path(str(output_dir_raw), root, "storage.output_dir")

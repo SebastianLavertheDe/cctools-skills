@@ -8,32 +8,29 @@ from pathlib import Path
 from .cache import RedditFetchCache
 from .config import load_config
 from .fetcher import fetch_listing
-from .runtime_paths import RuntimePathError, optional_run_dir, require_skill_data_dir, require_mymind_root
+from .runtime_paths import RuntimePathError, optional_run_dir, require_skill_data_dir, require_content_root
 from .storage import write_subreddit_markdown
 
 
 def _ensure_local_cron_bindings() -> None:
     """Fill Broker-style bindings for bare local/cron invocations."""
     skill_dir = Path(__file__).resolve().parents[1]
-    if not os.environ.get("CCTOOLS_SKILL_DATA_DIR"):
+    if not (os.environ.get("OPENMIND_SKILL_DATA_DIR") or os.environ.get("CCTOOLS_SKILL_DATA_DIR")):
         os.environ["CCTOOLS_SKILL_DATA_DIR"] = str(skill_dir)
-    repo_root = None
+    # Installed copies live at <content-root>/.agent/skills/cctools/<skill>/;
+    # the ancestor carrying the app-managed .agent/skills store is the
+    # user-selected content root itself (flat layout, no mymind/ layer).
     for parent in [skill_dir, *skill_dir.parents]:
-        if parent.name == ".claude":
-            repo_root = parent.parent
+        if (parent / ".agent" / "skills").is_dir():
+            if not (os.environ.get("OPENMIND_ROOT") or os.environ.get("CCTOOLS_MYMIND_ROOT")):
+                os.environ["OPENMIND_ROOT"] = str(parent)
             break
-    if repo_root is None:
-        return
-    if not (os.environ.get("CCTOOLS_MYMIND_ROOT") or os.environ.get("MYMIND_ROOT")):
-        mymind = repo_root / "mymind"
-        if mymind.is_dir():
-            os.environ["CCTOOLS_MYMIND_ROOT"] = str(mymind)
 
 
 def run() -> int:
     parser = argparse.ArgumentParser(description="Fetch Reddit hot listings")
     parser.add_argument("--config", default="config.yaml", help="Path to config.yaml")
-    parser.add_argument("--mymind-root", default="", help="Explicit mymind root; defaults to CCTOOLS_MYMIND_ROOT.")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
     parser.add_argument("--skill-data-dir", default="", help="App-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="App-private Run working directory.")
     parser.add_argument("--date", default="", help="Output date in YYYYMMDD or YYYY-MM-DD format.")
@@ -41,10 +38,10 @@ def run() -> int:
 
     try:
         _ensure_local_cron_bindings()
-        mymind_root = require_mymind_root(args.mymind_root)
+        content_root = require_content_root(args.content_root)
         require_skill_data_dir(args.skill_data_dir)
         optional_run_dir(args.run_dir)
-        config = load_config(args.config, str(mymind_root), args.skill_data_dir)
+        config = load_config(args.config, str(content_root), args.skill_data_dir)
     except RuntimePathError as exc:
         parser.error(str(exc))
 

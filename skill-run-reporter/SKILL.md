@@ -1,7 +1,7 @@
 ---
 name: skill-run-reporter
 description: Report daily skill run status and results. Use when the user asks about skill execution status, which skills ran today/yesterday, daily run report, skill运行情况, or 技能运行报告. Also when the user says "check skills", "skill status", "运行报告", "每日报告", or wants to know if a specific skill ran.
-# desktop-app 执行配置
+# openmind-app 执行配置
 title: 运行报告
 group: 维护
 cwd: .
@@ -21,13 +21,13 @@ Check and report which skills ran on a given date, their execution status, and k
 ## Usage
 
 ```bash
-python3 scripts/report.py --mymind-root /path/to/mymind [YYYYMMDD]
+python3 scripts/report.py --content-root /path/to/content-root [YYYYMMDD]
 ```
 
 Default date is yesterday. Pass a date like `20260519` to check a specific day.
 
-The script scans the selected mymind output directories and, when supplied by
-the desktop app, structured RunStore records under `CCTOOLS_RUN_DIR`. It does
+The script scans the selected content output directories and, when supplied by
+the desktop app, structured RunStore records under `OPENMIND_RUN_DIR`. It does
 not read Skill installation directories, caches, logs or a cctools ancestor.
 
 ## What it checks

@@ -21,8 +21,8 @@ from runtime_paths import (
     RuntimePathError,
     optional_run_dir,
     require_skill_data_dir,
-    require_mymind_root,
-    resolve_mymind_path,
+    require_content_root,
+    resolve_content_path,
 )
 
 from ai_client import (  # noqa: E402
@@ -1618,10 +1618,10 @@ def main() -> None:
     )
     parser.add_argument(
         "--base-dir",
-        default="mymind",
-        help="Logical mymind base; resolved below the bound mymind root.",
+        default="",
+        help="Logical base subdirectory below the bound content root; empty means the root itself.",
     )
-    parser.add_argument("--mymind-root", default="", help="Explicit mymind root; defaults to CCTOOLS_MYMIND_ROOT.")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
     parser.add_argument("--skill-data-dir", default="", help="App-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="App-private Run working directory.")
     parser.add_argument(
@@ -1647,10 +1647,10 @@ def main() -> None:
         load_env_file(args.env_file)
 
     try:
-        mymind_root = require_mymind_root(args.mymind_root)
+        content_root = require_content_root(args.content_root)
         skill_data_dir = require_skill_data_dir(args.skill_data_dir)
         optional_run_dir(args.run_dir)
-        base_dir = resolve_mymind_path(args.base_dir, mymind_root, "--base-dir")
+        base_dir = resolve_content_path(args.base_dir, content_root, "--base-dir") if args.base_dir else content_root
     except RuntimePathError as exc:
         parser.error(str(exc))
 

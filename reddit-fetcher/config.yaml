@@ -30,7 +30,7 @@ fetch:
     - "https://www.reddit.com/r/eSIMs/hot/.json?limit=25"
 
 storage:
-  # Relative output paths are resolved below the explicitly bound mymind root.
+  # Relative output paths are resolved below the explicitly bound content root.
   output_dir: ""
-  # Relative cache paths are resolved below CCTOOLS_SKILL_DATA_DIR.
+  # Relative cache paths are resolved below OPENMIND_SKILL_DATA_DIR.
   cache_file: ""

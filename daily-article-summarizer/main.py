@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Daily Article Summarizer
-Scans project-root mymind/article/ for today's articles, summarizes them with AI, and writes daily markdown output
+Scans article/ below the bound content root for today's articles, summarizes them with AI, and writes daily markdown output
 """
 
 import os
@@ -31,9 +31,9 @@ from runtime_paths import (
     RuntimePathError,
     optional_run_dir,
     require_skill_data_dir,
-    require_mymind_root,
+    require_content_root,
     resolve_data_path,
-    resolve_mymind_path,
+    resolve_content_path,
 )
 
 MIN_MD_SCORE = 55
@@ -51,7 +51,7 @@ def parse_args() -> argparse.Namespace:
         help="Only summarize Reddit posts for the target date. Skips article scan and same-day post summary.",
     )
     parser.add_argument("--config", default="", help="Package config path; defaults to config.yaml inside this Skill.")
-    parser.add_argument("--mymind-root", default="", help="Explicit mymind root; defaults to CCTOOLS_MYMIND_ROOT.")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
     parser.add_argument("--skill-data-dir", default="", help="App-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="App-private Run working directory.")
     args = parser.parse_args()
@@ -84,7 +84,7 @@ def _select_platform_paths(raw_paths, platform: str):
     return raw_paths
 
 
-def _resolve_source_directories(raw_paths, platform: str, mymind_root: Path) -> list[str]:
+def _resolve_source_directories(raw_paths, platform: str, content_root: Path) -> list[str]:
     selected_paths = _select_platform_paths(raw_paths, platform)
     if isinstance(selected_paths, str):
         selected_paths = [selected_paths]
@@ -93,7 +93,7 @@ def _resolve_source_directories(raw_paths, platform: str, mymind_root: Path) -> 
 
     resolved_paths: list[str] = []
     for raw_path in selected_paths:
-        resolved_paths.append(str(resolve_mymind_path(str(raw_path), mymind_root, "source directory")))
+        resolved_paths.append(str(resolve_content_path(str(raw_path), content_root, "source directory")))
     return resolved_paths
 
 
@@ -1648,16 +1648,16 @@ def main() -> int:
         print("=" * 50)
 
         # Load configuration
-        mymind_root = require_mymind_root(args.mymind_root)
+        content_root = require_content_root(args.content_root)
         skill_data_dir = require_skill_data_dir(args.skill_data_dir)
         optional_run_dir(args.run_dir)
         config = load_config(args.config)
         # Resolve platform-specific directories
         _platform = "windows" if sys.platform == "win32" else "linux"
-        project_root = mymind_root
-        _raw_dirs = config.get("article_directory", "mymind/article")
+        project_root = content_root
+        _raw_dirs = config.get("article_directory", "article")
         article_dir = _resolve_source_directories(_raw_dirs, _platform, project_root)
-        _raw_reddit = config.get("reddit_directory", ["mymind/reddit"])
+        _raw_reddit = config.get("reddit_directory", ["reddit"])
         reddit_dir = _resolve_source_directories(_raw_reddit, _platform, project_root)
         ai_config = config.get("ai", {})
         cache_file = str(resolve_data_path(str(config.get("cache_file", "summary_cache.json")), skill_data_dir, "cache_file"))

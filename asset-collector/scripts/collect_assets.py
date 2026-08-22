@@ -6,16 +6,29 @@ import re
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from runtime_paths import RuntimePathError, require_mymind_root, resolve_mymind_path
+from runtime_paths import RuntimePathError, require_content_root, resolve_content_path
 
 DEFAULT_DRAFT_FILES = ["topic-brief.md", "xiaohongshu-draft.md", "wechat-draft.md", "twitter-thread.md"]
 URL_RE = re.compile(r"https?://[^\s<>)\\]\"']+")
 MD_LINK_RE = re.compile(r"(?<!!)\[([^\]]+)\]\((https?://[^)]+)\)")
 MD_IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)")
 IMAGE_SLOT_RE = re.compile(r"\[(图\d+|图片\d+|封面|配图\d*)[：:]\s*([^\]]+)\]")
+# Relative references keep the legacy `mymind/` prefix convention (stripped
+# when resolving against the bound root). Absolute references must match the
+# user-selected content root, so that branch is built at runtime instead of
+# hardcoding a repo layout — see enable_root_aware_local_sources().
 LOCAL_SOURCE_RE = re.compile(
-    r"(?:(?:`|\"|')?)((?:mymind|(?:/[^/\s`\"'。；、)）\]]+)+/cctools/mymind|[A-Za-z]:[\\/](?:[^\\/\s`\"'。；、)）\]]+[\\/])*cctools[\\/]mymind)[\\/][^\s`\"'。；、)）\]]+)"
+    r"(?:(?:`|\"|')?)(mymind[\\/][^\s`\"'。；、)）\]]+)"
 )
+
+
+def enable_root_aware_local_sources(root: Path) -> None:
+    global LOCAL_SOURCE_RE
+    escaped_root = re.escape(str(root))
+    escaped_root_fwd = re.escape(str(root).replace("\\", "/"))
+    LOCAL_SOURCE_RE = re.compile(
+        r"(?:(?:`|\"|')?)((?:mymind|" + escaped_root + "|" + escaped_root_fwd + r")[\\/][^\s`\"'。；、)）\]]+)"
+    )
 SOURCE_SUFFIXES = {".md", ".json", ".html", ".txt"}
 
 
@@ -271,25 +284,26 @@ def write_package_manifest(
     package_dir: Path,
     assets: List[Dict[str, object]],
     missing: List[Dict[str, str]],
-    mymind_root: Path,
+    content_root: Path,
 ) -> None:
     path = package_dir / "manifest.json"
     manifest = load_package_manifest(package_dir)
     manifest["asset_collection"] = "manifest_created"
     manifest["assets"] = assets
     manifest["missing_assets"] = missing
-    manifest["asset_manifest"] = (package_dir / "assets/manifest.json").relative_to(mymind_root).as_posix()
+    manifest["asset_manifest"] = (package_dir / "assets/manifest.json").relative_to(content_root).as_posix()
     manifest["asset_collected_at"] = dt.datetime.now().isoformat(timespec="seconds")
     path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def collect(args: argparse.Namespace) -> Dict[str, object]:
-    mymind_root = require_mymind_root(args.mymind_root)
-    package_dir = resolve_mymind_path(args.draft_dir, mymind_root, "--draft-dir")
+    content_root = require_content_root(args.content_root)
+    enable_root_aware_local_sources(content_root)
+    package_dir = resolve_content_path(args.draft_dir, content_root, "--draft-dir")
     if not package_dir.exists():
         raise FileNotFoundError(f"Draft dir not found: {package_dir}")
 
-    assets_dir = resolve_mymind_path(args.output_dir, mymind_root, "--output-dir") if args.output_dir else package_dir / "assets"
+    assets_dir = resolve_content_path(args.output_dir, content_root, "--output-dir") if args.output_dir else package_dir / "assets"
     assets_dir.mkdir(parents=True, exist_ok=True)
 
     input_names = [args.draft_file] if args.draft_file else DEFAULT_DRAFT_FILES
@@ -308,7 +322,7 @@ def collect(args: argparse.Namespace) -> Dict[str, object]:
 
     missing = missing_entries(assets)
     payload = {
-        "package_dir": package_dir.relative_to(mymind_root).as_posix(),
+        "package_dir": package_dir.relative_to(content_root).as_posix(),
         "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
         "input_files": [path.name for path in input_files],
         "assets": assets,
@@ -318,7 +332,7 @@ def collect(args: argparse.Namespace) -> Dict[str, object]:
     (assets_dir / "manifest.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     (assets_dir / "missing_assets.json").write_text(json.dumps(missing, ensure_ascii=False, indent=2), encoding="utf-8")
     if not args.no_update_package_manifest:
-        write_package_manifest(package_dir, assets, missing, mymind_root)
+        write_package_manifest(package_dir, assets, missing, content_root)
     return payload
 
 
@@ -327,7 +341,7 @@ def main() -> None:
     parser.add_argument("--draft-dir", required=True, help="Writing package directory.")
     parser.add_argument("--draft-file", default="", help="Optional single draft file name inside draft-dir.")
     parser.add_argument("--output-dir", default="", help="Optional output dir. Default: draft-dir/assets.")
-    parser.add_argument("--mymind-root", default="", help="Explicit mymind root; defaults to CCTOOLS_MYMIND_ROOT.")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
     parser.add_argument("--skill-data-dir", default="", help="Reserved app-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="Reserved app-private Run working directory.")
     parser.add_argument("--date", default="", help="Reserved for future package discovery.")

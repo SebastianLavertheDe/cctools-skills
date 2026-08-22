@@ -1,6 +1,6 @@
 # cctools-skills
 
-cctools 桌面应用的 Skill 分发仓库。每个顶层目录是一个独立 Skill 包（`cctools.skill.yaml` 清单 + `SKILL.md` 文档），可通过 desktop-app 的 Skill Center 从本仓库的 GitHub URL 安装。
+[openmind-app](https://github.com/SebastianLavertheDe/openmind-app) 的 Skill 分发仓库。每个顶层目录是一个独立 Skill 包（`cctools.skill.yaml` 清单 + `SKILL.md` 文档），可通过 openmind-app 的 Skill Center 从本仓库的 GitHub URL 安装。
 
 ## 安装方式
 
@@ -37,9 +37,9 @@ https://github.com/SebastianLavertheDe/cctools-skills.git
 Skill 通过环境变量绑定数据与配置（与仓库位置解耦）。内容根是**用户在 openmind-app 里自选的数据根**（即数据仓根本身，扁平布局：`article/`、`post/` 等内容目录直接在根下）：
 
 - `OPENMIND_ROOT`：内容根（唯一契约名）
-- `OPENMIND_SKILL_DATA_DIR`：单个 Skill 的私有缓存目录（旧名 `OPENMIND_SKILL_DATA_DIR` 兼容）；openmind-app Broker 自动注入，工作流和 cron wrapper 默认使用对应 Skill 目录
-- `OPENMIND_RUN_DIR`：Broker 为单次运行注入的临时运行目录（旧名 `OPENMIND_RUN_DIR` 兼容）
-- `OPENMIND_PROVIDER_*` / `OPENMIND_PROVIDERS_FILE`：AI provider 绑定（`config/providers.yaml`，含密钥，不入库；旧名 `OPENMIND_PROVIDER_*` / `OPENMIND_PROVIDERS_FILE` 兼容）
+- `OPENMIND_SKILL_DATA_DIR`：单个 Skill 的私有缓存目录；openmind-app Broker 自动注入，工作流和 cron wrapper 默认使用对应 Skill 目录
+- `OPENMIND_RUN_DIR`：Broker 为单次运行注入的临时运行目录
+- `OPENMIND_PROVIDER_*` / `OPENMIND_PROVIDERS_FILE`：AI provider 绑定（`config/providers.yaml`，含密钥，不入库）
 - openmind-app 安装运行时由 Broker 自动注入；crontab 直跑时需显式设置内容根与 provider 文件
 
 文档与配置中的相对路径均以内容根为基准（等价于 `$OPENMIND_ROOT/xxx`）。

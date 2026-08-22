@@ -20,7 +20,7 @@ A Claude skill that downloads videos from URLs and extracts their text content.
 
 ## Usage
 
-The skill x be used within Claude by simply providing a video URL. For example:
+The skill can be used within Claude by simply providing a video URL. For example:
 
 ```
 Download this video and extract the text: https://www.youtube.com/watch?v=example

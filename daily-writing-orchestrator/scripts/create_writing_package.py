@@ -428,7 +428,7 @@ risk_level: tbd
 - 保留风险检查区
 - 明确标注所有具体观点、帖子、数据引用的来源
 - 插入图位，例如 `[图1：来源截图，证明 xxx]`
-- 文件继续留在 `mymind/creative/01-内容生产/文稿库/02-制作中/` 对应发布包内，直到用户明确说“发布了”
+- 文件继续留在内容根 `creative/01-内容生产/文稿库/02-制作中/` 对应发布包内，直到用户明确说“发布了”
 
 ## 后续
 
@@ -511,7 +511,7 @@ def main() -> None:
     parser.add_argument("--topic-index", type=int, default=0, help="1-based row from 今日候选热点池.")
     parser.add_argument("--topic-file", default="", help="Override ai_topic file path.")
     parser.add_argument("--output-root", default="", help="Override package output root.")
-    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT.")
     parser.add_argument("--skill-data-dir", default="", help="Reserved app-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="Reserved app-private Run working directory.")
     parser.add_argument("--with-assets", action="store_true", help="Mark asset collection as pending after drafts.")

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# 内容根由子进程从环境读取（OPENMIND_ROOT，旧名 CCTOOLS_MYMIND_ROOT）。
+# 内容根由子进程从环境读取（OPENMIND_ROOT）。
 # auto-commit 已移除，产出经 openmind-app 或手动提交。
 START_DATE="${1:-20260209}"
 END_DATE="${2:-20260409}"

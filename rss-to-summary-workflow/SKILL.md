@@ -16,7 +16,7 @@ allowed-tools: Bash,Write,Read
 本地 launcher 需要外部注入内容根（Broker 场景由 openmind-app 自动注入）：
 
 ```bash
-export OPENMIND_ROOT=<用户在 openmind-app 选择的数据根>   # 旧名 OPENMIND_ROOT 仍被接受
+export OPENMIND_ROOT=<用户在 openmind-app 选择的数据根>
 uv run --project rss-article-saver python rss-to-summary-workflow/scripts/run_workflow.py \
   --workflow rss-to-summary
 ```

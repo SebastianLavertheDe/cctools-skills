@@ -19,7 +19,7 @@ inputs:
       type: string
       enum: [wechat, xiaohongshu, short-video]
 capabilities:
-  mymind:
+  openmind:
     read: [daily-summary/**, post/**, reddit/**, creative/**]
     write: [creative/01-内容生产/选题管理/**]
   network:
@@ -35,7 +35,7 @@ artifacts:
 execution:
   concurrency:
     maxInstances: 1
-    mutexes: [mymind:creative-topic-selection]
+    mutexes: [content:creative-topic-selection]
   timeoutSeconds: 1800
   gracefulStopSeconds: 10
   retry:

@@ -11,9 +11,9 @@ class RuntimePathError(ValueError):
 
 
 def require_content_root(cli_value: str | None = None) -> Path:
-    raw = (cli_value or os.environ.get("OPENMIND_ROOT") or os.environ.get("CCTOOLS_MYMIND_ROOT") or "").strip()
+    raw = (cli_value or os.environ.get("OPENMIND_ROOT") or "").strip()
     if not raw:
-        raise RuntimePathError("content root is required; pass --content-root or set OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT)")
+        raise RuntimePathError("content root is required; pass --content-root or set OPENMIND_ROOT")
     root = Path(raw).expanduser().resolve()
     if not root.is_dir():
         raise RuntimePathError(f"content root is not an existing directory: {root}")
@@ -26,9 +26,6 @@ def resolve_content_path(value: str, root: Path, label: str) -> Path:
         raise RuntimePathError(f"{label} must not be empty")
     candidate = Path(raw).expanduser()
     if not candidate.is_absolute():
-        parts = candidate.parts
-        if parts and parts[0].lower() == "mymind":
-            candidate = Path(*parts[1:])
         candidate = root / candidate
     resolved = candidate.resolve()
     try:

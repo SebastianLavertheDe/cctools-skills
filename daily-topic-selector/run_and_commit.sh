@@ -5,10 +5,10 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # 本 Skill 仓库根（skill 平铺在顶层；安装副本为 .agent/skills/cctools/）
 SKILL_REPO_ROOT="$(cd "$ROOT_DIR/.." && pwd)"
 # 内容根：用户在 openmind-app 选择的数据根，即数据仓根本身（扁平布局，无 mymind/ 层）。
-# 旧名 CCTOOLS_MYMIND_ROOT 仍被接受。auto-commit 已移除，产出经 openmind-app 或手动提交。
-CONTENT_ROOT="${OPENMIND_ROOT:-${CCTOOLS_MYMIND_ROOT:-}}"
+# auto-commit 已移除，产出经 openmind-app 或手动提交。
+CONTENT_ROOT="${OPENMIND_ROOT:-}"
 if [[ -z "$CONTENT_ROOT" ]]; then
-  echo "run_and_commit.sh: 需要设置 OPENMIND_ROOT 或 CCTOOLS_MYMIND_ROOT（指向数据仓根）" >&2
+  echo "run_and_commit.sh: 需要设置 OPENMIND_ROOT（指向数据仓根）" >&2
   exit 1
 fi
 BASE_DIR="$CONTENT_ROOT"

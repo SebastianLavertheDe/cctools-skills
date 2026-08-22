@@ -1,7 +1,7 @@
 [project]
 name = "daily-topic-selector"
 version = "1.0.0"
-description = "Select AI publishing topics from daily mymind summaries."
+description = "Select AI publishing topics from daily content-root summaries."
 readme = "SKILL.md"
 requires-python = ">=3.11"
 dependencies = ["PyYAML>=6.0"]

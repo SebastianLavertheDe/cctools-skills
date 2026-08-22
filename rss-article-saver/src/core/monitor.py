@@ -51,13 +51,13 @@ class RSSMonitor:
         print("=" * 50)
 
     def _filter_enabled_feeds(self, feeds):
-        requested_url = os.environ.get("CCTOOLS_SOURCE_URL", "").strip()
+        requested_url = os.environ.get("OPENMIND_SOURCE_URL", "").strip()
         if requested_url:
             selected = [feed for feed in feeds if feed.url == requested_url]
             print(f"Single source mode: {requested_url} ({len(selected)} matched)")
             return selected
 
-        project_root = os.environ.get("CCTOOLS_PROJECT_ROOT", "").strip()
+        project_root = os.environ.get("OPENMIND_PROJECT_ROOT", "").strip()
         if not project_root:
             return feeds
         settings_path = Path(project_root) / ".cctools" / "source-settings.json"

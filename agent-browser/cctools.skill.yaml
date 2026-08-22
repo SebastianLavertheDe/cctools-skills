@@ -19,7 +19,7 @@ inputs:
       type: string
       description: 起始页面 URL（可选）。
 capabilities:
-  mymind:
+  openmind:
     read: []
     write: []
   network:

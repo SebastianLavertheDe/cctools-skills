@@ -35,7 +35,7 @@ inputs:
       format: compact-date
 config: {}
 capabilities:
-  mymind:
+  openmind:
     read: [creative/**]
     write: [creative/**]
   network:
@@ -53,7 +53,7 @@ artifacts:
 execution:
   concurrency:
     maxInstances: 1
-    mutexes: [mymind:creative]
+    mutexes: [content:creative]
   timeoutSeconds: 1800
   gracefulStopSeconds: 10
   retry:

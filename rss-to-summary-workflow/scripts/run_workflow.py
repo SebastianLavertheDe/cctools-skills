@@ -157,10 +157,10 @@ def _run_step(
     try:
         resolved_command = _drop_missing_env_files(_resolve_command(command), skill_path)
         # Local/cron path: child skills require Broker-style bindings.
-        # 内容根必须由外部注入（crontab 或手动运行时设置 OPENMIND_ROOT，
-        # 旧名 CCTOOLS_MYMIND_ROOT 仍被接受）；skills 仓库不内嵌数据，无法推导。
+        # 内容根必须由外部注入（crontab 或手动运行时设置 OPENMIND_ROOT）；
+        # skills 仓库不内嵌数据，无法推导。
         env = os.environ.copy()
-        if not (env.get("OPENMIND_ROOT") or env.get("CCTOOLS_MYMIND_ROOT")):
+        if not env.get("OPENMIND_ROOT"):
             print(
                 "  Error: OPENMIND_ROOT is not set; point it at the "
                 "user-selected openmind content root (repo root, flat layout)"

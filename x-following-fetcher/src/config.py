@@ -177,14 +177,11 @@ def load_config(
     default_cache_file = data_dir / ".x-following-cache.json"
     default_curl_file = skill_dir / "curl.txt"
 
-    def resolve_mymind(raw_path: str, default_path: Path, label: str) -> Path:
+    def resolve_content(raw_path: str, default_path: Path, label: str) -> Path:
         if not raw_path:
             return default_path
         candidate = Path(os.path.expanduser(raw_path))
         if not candidate.is_absolute():
-            parts = candidate.parts
-            if parts and parts[0].lower() == "mymind":
-                candidate = Path(*parts[1:])
             candidate = root / candidate
         resolved = candidate.resolve()
         try:
@@ -194,9 +191,9 @@ def load_config(
         return resolved
 
     storage = StorageConfig(
-        output_dir=resolve_mymind(str(storage_raw.get("output_dir", "")), default_output_dir, "storage.output_dir"),
+        output_dir=resolve_content(str(storage_raw.get("output_dir", "")), default_output_dir, "storage.output_dir"),
         cache_file=resolve_bound_path(str(storage_raw.get("cache_file", "")) or ".x-following-cache.json", data_dir, "storage.cache_file"),
-        article_output_dir=resolve_mymind(str(storage_raw.get("article_output_dir", "")), default_article_output_dir, "storage.article_output_dir"),
+        article_output_dir=resolve_content(str(storage_raw.get("article_output_dir", "")), default_article_output_dir, "storage.article_output_dir"),
         daily_json_filename=str(storage_raw.get("daily_json_filename", "posts.json")),
         daily_html_filename=str(storage_raw.get("daily_html_filename", "index.html")),
         daily_markdown_filename=str(storage_raw.get("daily_markdown_filename", "timeline.md")),

@@ -28,7 +28,7 @@ inputs:
       format: compact-date
 config: {}
 capabilities:
-  mymind:
+  openmind:
     read: [article/**, daily-summary/**, daily-topic/**, post/**, reddit/**]
     write: []
   network:

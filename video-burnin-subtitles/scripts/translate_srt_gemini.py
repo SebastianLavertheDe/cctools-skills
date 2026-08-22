@@ -25,22 +25,22 @@ class Provider:
 
 
 def resolve_provider() -> Provider:
-    api_key = os.getenv("CCTOOLS_PROVIDER_API_KEY", "").strip()
-    base_url = os.getenv("CCTOOLS_PROVIDER_BASE_URL", "").strip()
-    model = os.getenv("CCTOOLS_PROVIDER_MODEL", "").strip()
+    api_key = os.getenv("OPENMIND_PROVIDER_API_KEY", "").strip()
+    base_url = os.getenv("OPENMIND_PROVIDER_BASE_URL", "").strip()
+    model = os.getenv("OPENMIND_PROVIDER_MODEL", "").strip()
     if not api_key or not base_url or not model:
         raise ValueError(
-            "Managed Run requires CCTOOLS_PROVIDER_API_KEY, "
-            "CCTOOLS_PROVIDER_BASE_URL and CCTOOLS_PROVIDER_MODEL."
+            "Managed Run requires OPENMIND_PROVIDER_API_KEY, "
+            "OPENMIND_PROVIDER_BASE_URL and OPENMIND_PROVIDER_MODEL."
         )
     return Provider(
         api_key=api_key,
         base_url=base_url,
         model=model,
-        protocol=os.getenv("CCTOOLS_PROVIDER_PROTOCOL", "provider-native").strip().lower(),
-        proxy_url=os.getenv("CCTOOLS_PROVIDER_PROXY_URL", "").strip(),
-        proxy_policy=os.getenv("CCTOOLS_PROVIDER_PROXY_POLICY", "system").strip().lower(),
-        tls_policy=os.getenv("CCTOOLS_PROVIDER_TLS_POLICY", "verify").strip().lower(),
+        protocol=os.getenv("OPENMIND_PROVIDER_PROTOCOL", "provider-native").strip().lower(),
+        proxy_url=os.getenv("OPENMIND_PROVIDER_PROXY_URL", "").strip(),
+        proxy_policy=os.getenv("OPENMIND_PROVIDER_PROXY_POLICY", "system").strip().lower(),
+        tls_policy=os.getenv("OPENMIND_PROVIDER_TLS_POLICY", "verify").strip().lower(),
     )
 
 
@@ -124,7 +124,7 @@ def build_request(provider: Provider, prompt: str):
 def open_provider(provider: Provider, req: request.Request):
     if provider.proxy_policy == "explicit":
         if not provider.proxy_url:
-            raise RuntimeError("Explicit provider proxy policy requires CCTOOLS_PROVIDER_PROXY_URL.")
+            raise RuntimeError("Explicit provider proxy policy requires OPENMIND_PROVIDER_PROXY_URL.")
         proxy_handler = request.ProxyHandler({"http": provider.proxy_url, "https": provider.proxy_url})
     elif provider.proxy_policy == "disabled":
         proxy_handler = request.ProxyHandler({})

@@ -45,7 +45,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--source", help="Daily summary markdown file to scan.")
     parser.add_argument("--date", help="Date in YYYYMMDD or YYYY-MM-DD format.")
-    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT.")
     parser.add_argument("--skill-data-dir", default="", help="Reserved app-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="Reserved app-private Run working directory.")
     parser.add_argument("--inbox", help="Output inbox file. Defaults to the standard content-root path.")

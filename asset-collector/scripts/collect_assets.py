@@ -13,22 +13,20 @@ URL_RE = re.compile(r"https?://[^\s<>)\\]\"']+")
 MD_LINK_RE = re.compile(r"(?<!!)\[([^\]]+)\]\((https?://[^)]+)\)")
 MD_IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)")
 IMAGE_SLOT_RE = re.compile(r"\[(图\d+|图片\d+|封面|配图\d*)[：:]\s*([^\]]+)\]")
-# Relative references keep the legacy `mymind/` prefix convention (stripped
-# when resolving against the bound root). Absolute references must match the
-# user-selected content root, so that branch is built at runtime instead of
-# hardcoding a repo layout — see enable_root_aware_local_sources().
-LOCAL_SOURCE_RE = re.compile(
-    r"(?:(?:`|\"|')?)(mymind[\\/][^\s`\"'。；、)）\]]+)"
-)
-
+# Local source references must match the bound content root (absolute paths
+# in either separator style); the pattern is built at runtime — see
+# enable_root_aware_local_sources(). The default never matches.
+LOCAL_SOURCE_RE = re.compile(r"(?!x)x")
 
 def enable_root_aware_local_sources(root: Path) -> None:
     global LOCAL_SOURCE_RE
     escaped_root = re.escape(str(root))
     escaped_root_fwd = re.escape(str(root).replace("\\", "/"))
     LOCAL_SOURCE_RE = re.compile(
-        r"(?:(?:`|\"|')?)((?:mymind|" + escaped_root + "|" + escaped_root_fwd + r")[\\/][^\s`\"'。；、)）\]]+)"
+        r"(?:(?:`|\"|')?)((?:" + escaped_root + "|" + escaped_root_fwd + r")[\\/][^\s`\"'。；、)）\]]+)"
     )
+
+
 SOURCE_SUFFIXES = {".md", ".json", ".html", ".txt"}
 
 
@@ -213,7 +211,7 @@ def extract_assets_from_text(source_doc: str, text: str, start_idx: int) -> Tupl
 
 
 def should_collect_local_source(source_file: str) -> bool:
-    if "/文稿库/02-制作中/" in source_file or "mymind/creative/01-内容生产/文稿库/02-制作中/" in source_file:
+    if "/文稿库/02-制作中/" in source_file:
         return False
     if source_file.endswith("/"):
         return False
@@ -341,7 +339,7 @@ def main() -> None:
     parser.add_argument("--draft-dir", required=True, help="Writing package directory.")
     parser.add_argument("--draft-file", default="", help="Optional single draft file name inside draft-dir.")
     parser.add_argument("--output-dir", default="", help="Optional output dir. Default: draft-dir/assets.")
-    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT.")
     parser.add_argument("--skill-data-dir", default="", help="Reserved app-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="Reserved app-private Run working directory.")
     parser.add_argument("--date", default="", help="Reserved for future package discovery.")

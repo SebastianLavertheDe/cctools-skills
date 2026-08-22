@@ -51,7 +51,7 @@ def parse_args() -> argparse.Namespace:
         help="Only summarize Reddit posts for the target date. Skips article scan and same-day post summary.",
     )
     parser.add_argument("--config", default="", help="Package config path; defaults to config.yaml inside this Skill.")
-    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT.")
     parser.add_argument("--skill-data-dir", default="", help="App-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="App-private Run working directory.")
     args = parser.parse_args()

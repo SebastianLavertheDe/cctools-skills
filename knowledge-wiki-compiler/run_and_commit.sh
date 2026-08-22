@@ -3,10 +3,10 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # 内容根：用户在 openmind-app 选择的数据根，即数据仓根本身（扁平布局，无 mymind/ 层）。
-# 旧名 CCTOOLS_MYMIND_ROOT 仍被接受。auto-commit 已移除，产出经 openmind-app 或手动提交。
-CONTENT_ROOT="${OPENMIND_ROOT:-${CCTOOLS_MYMIND_ROOT:-}}"
+# auto-commit 已移除，产出经 openmind-app 或手动提交。
+CONTENT_ROOT="${OPENMIND_ROOT:-}"
 if [[ -z "$CONTENT_ROOT" ]]; then
-  echo "run_and_commit.sh: 需要设置 OPENMIND_ROOT 或 CCTOOLS_MYMIND_ROOT（指向数据仓根）" >&2
+  echo "run_and_commit.sh: 需要设置 OPENMIND_ROOT（指向数据仓根）" >&2
   exit 1
 fi
 LOG_DIR="$ROOT_DIR/logs"
@@ -69,7 +69,7 @@ while [[ $# -gt 0 ]]; do
       PASSTHROUGH_ARGS+=("$1")
       shift
       ;;
-    --content-root|--mymind-root)
+    --content-root)
       if [[ $# -lt 2 ]]; then
         echo "--content-root requires a value" >&2
         exit 1
@@ -77,7 +77,7 @@ while [[ $# -gt 0 ]]; do
       CONTENT_ARG="$2"
       shift 2
       ;;
-    --content-root=*|--mymind-root=*)
+    --content-root=*)
       CONTENT_ARG="${1#*=}"
       shift
       ;;

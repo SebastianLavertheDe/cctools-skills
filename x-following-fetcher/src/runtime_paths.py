@@ -11,9 +11,9 @@ class RuntimePathError(ValueError):
 
 
 def require_content_root(cli_value: str | None = None) -> Path:
-    raw = (cli_value or os.environ.get("OPENMIND_ROOT") or os.environ.get("CCTOOLS_MYMIND_ROOT") or "").strip()
+    raw = (cli_value or os.environ.get("OPENMIND_ROOT") or "").strip()
     if not raw:
-        raise RuntimePathError("content root is required; pass --content-root or set OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT)")
+        raise RuntimePathError("content root is required; pass --content-root or set OPENMIND_ROOT")
     root = Path(raw).expanduser().resolve()
     if not root.is_dir():
         raise RuntimePathError(f"content root is not an existing directory: {root}")
@@ -21,16 +21,16 @@ def require_content_root(cli_value: str | None = None) -> Path:
 
 
 def require_skill_data_dir(cli_value: str | None = None) -> Path:
-    raw = (cli_value or os.environ.get("OPENMIND_SKILL_DATA_DIR") or os.environ.get("CCTOOLS_SKILL_DATA_DIR") or "").strip()
+    raw = (cli_value or os.environ.get("OPENMIND_SKILL_DATA_DIR") or "").strip()
     if not raw:
-        raise RuntimePathError("Skill data directory is required; pass --skill-data-dir or set OPENMIND_SKILL_DATA_DIR (legacy alias CCTOOLS_SKILL_DATA_DIR)")
+        raise RuntimePathError("Skill data directory is required; pass --skill-data-dir or set OPENMIND_SKILL_DATA_DIR")
     data_dir = Path(raw).expanduser().resolve()
     data_dir.mkdir(parents=True, exist_ok=True)
     return data_dir
 
 
 def optional_run_dir(cli_value: str | None = None) -> Path | None:
-    raw = (cli_value or os.environ.get("OPENMIND_RUN_DIR") or os.environ.get("CCTOOLS_RUN_DIR") or "").strip()
+    raw = (cli_value or os.environ.get("OPENMIND_RUN_DIR") or "").strip()
     if not raw:
         return None
     run_dir = Path(raw).expanduser().resolve()

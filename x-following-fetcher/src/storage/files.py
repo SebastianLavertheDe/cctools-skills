@@ -203,12 +203,12 @@ def _collect_existing_article_tweet_ids(article_root: Path) -> set[str]:
 
 
 def _skill_dir() -> Path:
-    configured = (os.environ.get("OPENMIND_SKILL_HOME") or os.environ.get("CCTOOLS_SKILL_HOME") or "").strip()
+    configured = os.environ.get("OPENMIND_SKILL_HOME", "").strip()
     return Path(configured).expanduser().resolve() if configured else Path(__file__).resolve().parents[2]
 
 
 def _external_article_log_path() -> Path:
-    data_dir = (os.environ.get("OPENMIND_SKILL_DATA_DIR") or os.environ.get("CCTOOLS_SKILL_DATA_DIR") or "").strip()
+    data_dir = (os.environ.get("OPENMIND_SKILL_DATA_DIR") or "").strip()
     if data_dir:
         return Path(data_dir).expanduser().resolve() / "external_article_fetch.log"
     return Path(tempfile.gettempdir()) / "openmind-x-following-fetcher" / "external_article_fetch.log"
@@ -266,10 +266,8 @@ def _extract_external_articles(links: list[str]) -> dict[str, dict[str, object]]
                 **os.environ,
                 # Keep Broker/local bindings visible to the helper process.
                 "OPENMIND_ROOT": os.environ.get("OPENMIND_ROOT", ""),
-                "CCTOOLS_MYMIND_ROOT": os.environ.get("CCTOOLS_MYMIND_ROOT", ""),
-                "OPENMIND_SKILL_DATA_DIR": os.environ.get("OPENMIND_SKILL_DATA_DIR", ""),
-                "CCTOOLS_SKILL_DATA_DIR": os.environ.get(
-                    "CCTOOLS_SKILL_DATA_DIR", str(skill_dir)
+                "OPENMIND_SKILL_DATA_DIR": os.environ.get(
+                    "OPENMIND_SKILL_DATA_DIR", str(skill_dir)
                 ),
             },
         )

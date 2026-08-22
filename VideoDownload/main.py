@@ -24,7 +24,7 @@ class VideoDownloader:
 
     @staticmethod
     def yt_dlp_command() -> str:
-        command = os.environ.get("CCTOOLS_MEDIA_YTDLP", "").strip() or shutil.which("yt-dlp")
+        command = os.environ.get("OPENMIND_MEDIA_YTDLP", "").strip() or shutil.which("yt-dlp")
         if not command:
             raise RuntimeError("yt-dlp is not available in the managed media Runtime Pack")
         return command

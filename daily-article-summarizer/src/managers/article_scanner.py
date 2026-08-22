@@ -1,4 +1,4 @@
-"""Article scanner for finding today's articles in mymind directory"""
+"""Article scanner for finding today's articles in the content root"""
 
 import os
 import re
@@ -9,7 +9,7 @@ from ..core.models import ArticleMetadata
 
 
 class ArticleScanner:
-    """Scans mymind directory for articles"""
+    """Scans the content root for articles"""
 
     def __init__(self, article_directory: Union[str, Iterable[str]]):
         self.article_directory = self._normalize_paths(article_directory)

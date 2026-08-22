@@ -84,7 +84,7 @@ def load_config(
     return AppConfig(
         skill_root=skill_root,
         # Kept for the compiler's relative-link compatibility code. It now
-        # means the bound mymind root, never a repository discovered by walk-up.
+        # means the bound content root, never a repository discovered by walk-up.
         repo_root=root,
         article_dir=resolve_content_path(str(raw_cfg.get("article_dir", "article")), root, "raw.article_dir"),
         post_dir=resolve_content_path(str(raw_cfg.get("post_dir", "post")), root, "raw.post_dir"),

@@ -70,4 +70,4 @@ receives `OPENMIND_ROOT`, `OPENMIND_SKILL_DATA_DIR` and `OPENMIND_RUN_DIR`
 from the desktop app; it never discovers a project by walking parent folders.
 
 For direct execution, bind an explicit `--content-root` and `--skill-data-dir`
-(or set the corresponding `CCTOOLS_*` environment values).
+(or set the corresponding `OPENMIND_*` environment values).

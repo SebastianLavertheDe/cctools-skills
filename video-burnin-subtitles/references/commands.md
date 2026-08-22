@@ -11,10 +11,10 @@ Environment variables (required for translation; a managed Run injects these fro
 
 ```bash
 export OPENMIND_ROOT="/absolute/path/to/content-root"
-export CCTOOLS_PROVIDER_PROTOCOL="openai-chat"
-export CCTOOLS_PROVIDER_BASE_URL="https://generativelanguage.googleapis.com/v1beta/openai"
-export CCTOOLS_PROVIDER_MODEL="gemini-2.5-flash"
-export CCTOOLS_PROVIDER_API_KEY="***"
+export OPENMIND_PROVIDER_PROTOCOL="openai-chat"
+export OPENMIND_PROVIDER_BASE_URL="https://generativelanguage.googleapis.com/v1beta/openai"
+export OPENMIND_PROVIDER_MODEL="gemini-2.5-flash"
+export OPENMIND_PROVIDER_API_KEY="***"
 ```
 
 Output naming:

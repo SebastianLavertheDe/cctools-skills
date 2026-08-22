@@ -1,7 +1,7 @@
 [project]
 name = "daily-article-summarizer"
 version = "1.0.0"
-description = "Summarize daily articles from mymind directory"
+description = "Summarize daily articles from the openmind content root"
 readme = "SKILL.md"
 requires-python = ">=3.10"
 dependencies = [

@@ -9,20 +9,20 @@ from pathlib import Path
 
 from runtime_paths import RuntimePathError, optional_run_dir, require_content_root
 
-MYMIND: Path | None = None
+CONTENT_ROOT: Path | None = None
 RUN_DIR: Path | None = None
 
 
 def configure_paths(content_root: Path, run_dir: Path | None) -> None:
-    global MYMIND, RUN_DIR
-    MYMIND = content_root
+    global CONTENT_ROOT, RUN_DIR
+    CONTENT_ROOT = content_root
     RUN_DIR = run_dir
 
 
-def mymind_path(*parts: str) -> Path:
-    if MYMIND is None:
+def content_path(*parts: str) -> Path:
+    if CONTENT_ROOT is None:
         raise RuntimeError("report paths have not been configured")
-    return MYMIND.joinpath(*parts)
+    return CONTENT_ROOT.joinpath(*parts)
 
 
 def run_records(date_str: str) -> list[dict]:
@@ -140,7 +140,7 @@ def check_rss_article_saver(date_str):
     info = {"skill": "rss-article-saver", "ran": False, "details": {}}
 
     # Output directory
-    article_dir = mymind_path("article", date_str)
+    article_dir = content_path("article", date_str)
     if article_dir.exists():
         count = count_files(article_dir)
         info["ran"] = True
@@ -153,7 +153,7 @@ def check_rss_article_saver(date_str):
         info["details"]["status"] = entries[-1].get("state")
 
     # Counter
-    counter = read_json(mymind_path("article", ".counter.json"))
+    counter = read_json(content_path("article", ".counter.json"))
     if counter and counter.get("current_date") == date_str:
         info["ran"] = True
         info["details"]["counter"] = counter.get("article_counter", "?")
@@ -165,7 +165,7 @@ def check_daily_article_summarizer(date_str):
     info = {"skill": "daily-article-summarizer", "ran": False, "details": {}}
 
     # Output file
-    summary_file = mymind_path("daily-summary", f"{date_str}_daily_summary.md")
+    summary_file = content_path("daily-summary", f"{date_str}_daily_summary.md")
     if summary_file.exists():
         info["ran"] = True
         size = file_size_kb(summary_file)
@@ -183,7 +183,7 @@ def check_daily_article_summarizer(date_str):
 def check_x_following_fetcher(date_str):
     info = {"skill": "x-following-fetcher", "ran": False, "details": {}}
 
-    post_dir = mymind_path("post", date_str)
+    post_dir = content_path("post", date_str)
     if post_dir.exists():
         info["ran"] = True
         posts_json = post_dir / "posts.json"
@@ -203,7 +203,7 @@ def check_x_following_fetcher(date_str):
 def check_reddit_fetcher(date_str):
     info = {"skill": "reddit-fetcher", "ran": False, "details": {}}
 
-    reddit_dir = mymind_path("reddit", date_str)
+    reddit_dir = content_path("reddit", date_str)
     if reddit_dir.exists():
         info["ran"] = True
         md_files = list(reddit_dir.glob("*.md"))
@@ -221,7 +221,7 @@ def check_reddit_fetcher(date_str):
 def check_daily_topic_selector(date_str):
     info = {"skill": "daily-topic-selector", "ran": False, "details": {}}
 
-    topic_file = mymind_path("daily-topic", f"{date_str}_daily_topic.md")
+    topic_file = content_path("daily-topic", f"{date_str}_daily_topic.md")
     if topic_file.exists():
         info["ran"] = True
         info["details"]["topic_file_kb"] = file_size_kb(topic_file)
@@ -234,7 +234,7 @@ def check_knowledge_wiki_compiler(date_str):
 
     # Dated cron log
     # Lint report timestamp
-    lint_report = mymind_path("wiki", "_state", "lint_report.md")
+    lint_report = content_path("wiki", "_state", "lint_report.md")
     if lint_report.exists():
         mtime = datetime.fromtimestamp(lint_report.stat().st_mtime)
         if mtime.strftime("%Y%m%d") == date_str:
@@ -248,7 +248,7 @@ def check_ai_media_topic_selector(date_str):
     info = {"skill": "ai-media-topic-selector", "ran": False, "details": {}}
 
     iso = iso_date(date_str)
-    topic_dir = mymind_path("creative", "01-内容生产", "选题管理")
+    topic_dir = content_path("creative", "01-内容生产", "选题管理")
     if topic_dir.exists():
         for f in topic_dir.iterdir():
             if f.is_file() and iso in f.name and f.name.endswith(".md"):
@@ -262,7 +262,7 @@ def check_ai_media_topic_selector(date_str):
 def check_collect_interest_markers(date_str):
     info = {"skill": "collect-interest-markers", "ran": False, "details": {}}
 
-    inbox = mymind_path("creative", "01-内容生产", "选题管理", "00-兴趣收集箱.md")
+    inbox = content_path("creative", "01-内容生产", "选题管理", "00-兴趣收集箱.md")
     if not inbox.exists():
         return info
 
@@ -325,8 +325,8 @@ CHECKS = [
 def main():
     parser = argparse.ArgumentParser(description="Report installed Skill run status for a given date.")
     parser.add_argument("date", nargs="?", default=yesterday_str(), help="Date in YYYYMMDD format.")
-    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
-    parser.add_argument("--run-dir", default="", help="App-private Run directory; defaults to OPENMIND_RUN_DIR (legacy alias CCTOOLS_RUN_DIR).")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT.")
+    parser.add_argument("--run-dir", default="", help="App-private Run directory; defaults to OPENMIND_RUN_DIR.")
     parser.add_argument("--skill-data-dir", default="", help="Reserved app-private Skill data directory.")
     args = parser.parse_args()
     try:

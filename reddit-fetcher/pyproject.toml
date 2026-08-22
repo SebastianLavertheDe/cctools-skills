@@ -1,7 +1,7 @@
 [project]
 name = "reddit-fetcher"
 version = "0.1.0"
-description = "Fetch Reddit hot listings into mymind/reddit"
+description = "Fetch Reddit hot listings into reddit/ below the content root"
 requires-python = ">=3.11"
 dependencies = [
   "pyyaml>=6.0.2",

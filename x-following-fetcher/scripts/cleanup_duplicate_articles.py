@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""一次性清理 mymind/article 下同 tweet_id 跨日期目录重复的 x_ article.
+"""一次性清理内容根 article/ 下同 tweet_id 跨日期目录重复的 x_ article.
 
 保留规则: 每个 tweet_id 保留最早日期目录里的全部文件(含多链接 _01.._NN).
 安全: 默认 dry-run 仅预览; 仅删除确属同 tweet_id 跨目录的副本; 不动单目录内多链接文件.
@@ -20,7 +20,7 @@ _TID_RE = re.compile(r"^x_(\d+)")
 
 
 def _resolve_article_root(cli_value) -> Path:
-    # 绑定内容根（OPENMIND_ROOT，旧名 CCTOOLS_MYMIND_ROOT 兼容）；
+    # 绑定内容根（OPENMIND_ROOT）；
     # 扁平布局下文章位于 <root>/article。
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
     from runtime_paths import require_content_root
@@ -47,7 +47,7 @@ def collect_groups(article_root: Path) -> dict[str, dict[str, list[Path]]]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--article-root", type=Path, default=None,
-                    help="article 目录；默认 <内容根>/article（OPENMIND_ROOT，旧名 CCTOOLS_MYMIND_ROOT）")
+                    help="article 目录；默认 <内容根>/article（OPENMIND_ROOT）")
     ap.add_argument("--apply", dest="dry_run", action="store_false",
                     help="真正执行删除 (默认 dry-run 仅预览)")
     ap.set_defaults(dry_run=True)

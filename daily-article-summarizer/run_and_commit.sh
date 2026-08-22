@@ -2,9 +2,14 @@
 set -euo pipefail
 
 # Run the summarizer only. Content root is read from the environment by
-# main.py (OPENMIND_ROOT, legacy alias CCTOOLS_MYMIND_ROOT); auto-commit
-# has been removed — commit outputs through openmind-app or manually.
+# main.py (OPENMIND_ROOT); auto-commit has been removed — commit outputs
+# through openmind-app or manually.
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [[ -z "${OPENMIND_ROOT:-}" ]]; then
+  echo "run_and_commit.sh: 需要设置 OPENMIND_ROOT（指向数据仓根）" >&2
+  exit 1
+fi
 
 if command -v uv >/dev/null 2>&1; then
   UV_BIN="$(command -v uv)"

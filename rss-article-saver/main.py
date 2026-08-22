@@ -17,9 +17,9 @@ from src.runtime_paths import RuntimePathError, optional_run_dir, require_skill_
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Save RSS articles into the bound mymind root.")
+    parser = argparse.ArgumentParser(description="Save RSS articles into the bound content root.")
     parser.add_argument("--config", default="", help="Package config path; defaults to config.yaml inside this Skill.")
-    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT.")
     parser.add_argument("--skill-data-dir", default="", help="App-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="App-private Run working directory.")
     parser.add_argument("--date", default="", help="Output date in YYYYMMDD; defaults to the local current date.")

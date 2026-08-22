@@ -499,7 +499,7 @@ class RSSManager:
         return True
 
     def _save_article(self, article: Article) -> None:
-        """Save article to mymind/article directory organized by week as Markdown"""
+        """Save article to article/ below the content root, organized by week as Markdown"""
         try:
             # Get current date
             now = datetime.now()

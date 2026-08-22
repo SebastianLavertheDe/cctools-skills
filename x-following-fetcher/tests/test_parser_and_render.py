@@ -685,10 +685,10 @@ class MediaDownloadTests(unittest.TestCase):
 
 class DailyBundleStorageTests(unittest.TestCase):
     def test_load_config_resolves_output_dir_from_repo_root(self):
-        Path(os.environ["CCTOOLS_MYMIND_ROOT"]).mkdir(parents=True, exist_ok=True)
+        Path(os.environ["OPENMIND_ROOT"]).mkdir(parents=True, exist_ok=True)
         config = load_config(ROOT / "config.yaml")
 
-        bound_root = Path(os.environ["CCTOOLS_MYMIND_ROOT"])
+        bound_root = Path(os.environ["OPENMIND_ROOT"])
         self.assertEqual(config.storage.output_dir, bound_root / "post")
         self.assertEqual(config.storage.article_output_dir, bound_root / "article")
 

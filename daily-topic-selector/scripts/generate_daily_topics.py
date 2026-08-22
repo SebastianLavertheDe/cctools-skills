@@ -1621,13 +1621,13 @@ def main() -> None:
         default="",
         help="Logical base subdirectory below the bound content root; empty means the root itself.",
     )
-    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT).")
+    parser.add_argument("--content-root", default="", help="Explicit content root; defaults to OPENMIND_ROOT.")
     parser.add_argument("--skill-data-dir", default="", help="App-private Skill data directory.")
     parser.add_argument("--run-dir", default="", help="App-private Run working directory.")
     parser.add_argument(
         "--no-post-summary",
         action="store_true",
-        help="Skip summarizing mymind/post/YYYYMMDD/posts.json.",
+        help="Skip summarizing post/YYYYMMDD/posts.json below the content root.",
     )
     parser.add_argument(
         "--post-candidate-limit",
@@ -1668,7 +1668,7 @@ def main() -> None:
 
     provider_configs = choose_ai_providers(args.provider)
     post_source_path = base_dir / "post" / date_str / "posts.json"
-    # LLM cache is app-private state, never content under mymind or the package.
+    # LLM cache is app-private state, never content under the content root or the package.
     cache_dir = skill_data_dir / "daily-topic-cache"
 
     # The three top-level stages have no data dependency between them (the only

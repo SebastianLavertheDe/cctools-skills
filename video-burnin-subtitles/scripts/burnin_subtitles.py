@@ -56,12 +56,12 @@ def run(command: list[str], *, cwd: Path | None = None, capture: bool = False) -
 
 
 def resolve_content_root() -> Path:
-    raw = (os.environ.get("OPENMIND_ROOT") or os.environ.get("CCTOOLS_MYMIND_ROOT") or "").strip()
+    raw = (os.environ.get("OPENMIND_ROOT") or "").strip()
     if not raw:
-        raise BurninError("OPENMIND_ROOT (legacy alias CCTOOLS_MYMIND_ROOT) is required and must point to an existing content root.")
+        raise BurninError("OPENMIND_ROOT is required and must point to an existing content root.")
     root = Path(raw).expanduser()
     if not root.is_dir():
-        raise BurninError(f"Mymind root does not exist or is not a directory: {root}")
+        raise BurninError(f"Content root does not exist or is not a directory: {root}")
     return root.resolve()
 
 
@@ -78,7 +78,7 @@ def is_url(value: str) -> bool:
 
 def acquire_video(source: str, language: str, output_name: str, output_root: Path) -> tuple[Path, Path]:
     if is_url(source):
-        yt_dlp = require_command("yt-dlp", "CCTOOLS_MEDIA_YTDLP")
+        yt_dlp = require_command("yt-dlp", "OPENMIND_MEDIA_YTDLP")
         workdir = output_root / slugify(output_name or "video")
         workdir.mkdir(parents=True, exist_ok=True)
         template = str(workdir / "%(title).200s.%(ext)s")
@@ -156,7 +156,7 @@ def find_subtitle(video: Path, workdir: Path, language: str, explicit: str) -> t
 
 def prepare_subtitle(video: Path, workdir: Path, language: str, explicit: str) -> Path:
     subtitle, user_supplied = find_subtitle(video, workdir, language, explicit)
-    ffmpeg = require_command("ffmpeg", "CCTOOLS_MEDIA_FFMPEG")
+    ffmpeg = require_command("ffmpeg", "OPENMIND_MEDIA_FFMPEG")
     if subtitle is None:
         embedded = workdir / f"{video.stem}.embedded.{language}.srt"
         try:
@@ -168,7 +168,7 @@ def prepare_subtitle(video: Path, workdir: Path, language: str, explicit: str) -
         if embedded.is_file():
             subtitle = embedded
     if subtitle is None:
-        whisper = require_command("whisper", "CCTOOLS_SPEECH_WHISPER")
+        whisper = require_command("whisper", "OPENMIND_SPEECH_WHISPER")
         run([
             whisper,
             str(video),
@@ -206,7 +206,7 @@ def translate_subtitle(source: Path, target: Path) -> None:
 
 
 def burn_video(video: Path, subtitle: Path, output: Path) -> None:
-    ffmpeg = require_command("ffmpeg", "CCTOOLS_MEDIA_FFMPEG")
+    ffmpeg = require_command("ffmpeg", "OPENMIND_MEDIA_FFMPEG")
     filter_name = "ass" if subtitle.suffix.lower() == ".ass" else "subtitles"
     subtitle_value = escape_filter_path(subtitle)
     filter_value = f"{filter_name}=filename='{subtitle_value}':force_style='{STYLE}'"

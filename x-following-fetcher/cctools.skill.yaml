@@ -7,7 +7,7 @@ publisher:
 kind: process
 display:
   name: X Following 抓取
-  description: 抓取关注列表并将帖子和可选外链文章写入现有 mymind 契约。
+  description: 抓取关注列表并将帖子和可选外链文章写入内容根 post/ 与 article/ 契约。
   group: 内容采集
 entrypoint:
   runtime: python
@@ -24,7 +24,7 @@ config:
     type: secret-ref
     secretRef: credential:x-following-session
 capabilities:
-  mymind:
+  openmind:
     read: [post/**, article/**]
     write: [post/**, article/**]
   network:
@@ -42,7 +42,7 @@ artifacts:
 execution:
   concurrency:
     maxInstances: 1
-    mutexes: [mymind:post]
+    mutexes: [content:post]
   timeoutSeconds: 3600
   gracefulStopSeconds: 10
   retry:

@@ -12,8 +12,22 @@ import importlib.util
 
 # Fix Windows console encoding (GBK -> UTF-8)
 if sys.platform == "win32":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    # Keep managed Desktop logs line-buffered instead of reverting to the
+    # default ~8 KiB TextIOWrapper buffer.
+    sys.stdout = io.TextIOWrapper(
+        sys.stdout.buffer,
+        encoding="utf-8",
+        errors="replace",
+        line_buffering=True,
+        write_through=True,
+    )
+    sys.stderr = io.TextIOWrapper(
+        sys.stderr.buffer,
+        encoding="utf-8",
+        errors="replace",
+        line_buffering=True,
+        write_through=True,
+    )
 import json
 import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -37,6 +51,7 @@ from runtime_paths import (
 )
 
 MIN_MD_SCORE = 55
+MAX_SUMMARY_WORKERS = 3
 
 
 def parse_args() -> argparse.Namespace:
@@ -1794,7 +1809,7 @@ def main() -> int:
 
         # 常驻线程池（并发度不再受 batch_size 限制），流式提交全部文章。
         # mark_as_summarized 进内存 dirty，每完成 batch_size 篇 flush 一次（DAS-1）。
-        worker_count = max(1, min(8, len(new_articles))) if new_articles else 1
+        worker_count = max(1, min(MAX_SUMMARY_WORKERS, len(new_articles))) if new_articles else 1
         print(f"\n  Summarizing {len(new_articles)} articles with {worker_count} workers...")
         completed_since_flush = 0
 

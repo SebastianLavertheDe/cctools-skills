@@ -9,8 +9,23 @@ import argparse
 
 # Fix Windows console encoding (GBK -> UTF-8)
 if sys.platform == "win32":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    # Preserve the managed Runtime's unbuffered streaming behavior. Rebuilding
+    # TextIOWrapper with its defaults buffers roughly 8 KiB and makes Desktop
+    # runtime logs appear frozen between large output bursts.
+    sys.stdout = io.TextIOWrapper(
+        sys.stdout.buffer,
+        encoding="utf-8",
+        errors="replace",
+        line_buffering=True,
+        write_through=True,
+    )
+    sys.stderr = io.TextIOWrapper(
+        sys.stderr.buffer,
+        encoding="utf-8",
+        errors="replace",
+        line_buffering=True,
+        write_through=True,
+    )
 
 from src.core.monitor import RSSMonitor
 from src.runtime_paths import RuntimePathError, optional_run_dir, require_skill_data_dir, require_content_root

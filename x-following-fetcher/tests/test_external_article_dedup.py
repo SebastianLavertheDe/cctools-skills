@@ -86,10 +86,20 @@ class WriteExternalArticleDedupTests(unittest.TestCase):
                 "src.storage.files._extract_external_articles",
                 return_value={"https://example.com/new": {"title": "New Article"}},
             ):
-                saved = _write_external_link_tweet_articles(today_dir, [tweet], config)
+                reported: list[tuple[str, Path]] = []
+                saved = _write_external_link_tweet_articles(
+                    today_dir,
+                    [tweet],
+                    config,
+                    on_artifact=lambda declaration_id, artifact_path: reported.append(
+                        (declaration_id, artifact_path)
+                    ),
+                )
 
             self.assertEqual(saved, 1)
-            self.assertEqual(len(list(today_dir.glob("x_999*.md"))), 1)
+            written = list(today_dir.glob("x_999*.md"))
+            self.assertEqual(len(written), 1)
+            self.assertEqual(reported, [("x-articles", written[0])])
 
     def test_preserves_existing_article_in_today_dir(self):
         # 当天目录已有该 tweet 的 article, 再次运行不应删除(避免反复增删的回归 bug)

@@ -9,7 +9,13 @@ from .fetcher.client import FetchError, fetch_timelines
 from .parser.timeline import parse_timeline_payload
 from .storage.cache import PostCache
 from .storage.files import save_new_tweets
-from .runtime_paths import RuntimePathError, optional_run_dir, require_skill_data_dir, require_content_root
+from .runtime_paths import (
+    RuntimePathError,
+    optional_run_dir,
+    require_content_root,
+    require_skill_data_dir,
+    write_artifact_report,
+)
 
 
 def _ensure_local_cron_bindings() -> None:
@@ -44,7 +50,7 @@ def run() -> int:
         _ensure_local_cron_bindings()
         root = require_content_root(args.content_root)
         data_dir = require_skill_data_dir(args.skill_data_dir)
-        optional_run_dir(args.run_dir)
+        run_dir = optional_run_dir(args.run_dir)
         config_path = Path(args.config).expanduser() if args.config else None
         config = load_config(config_path, root, data_dir)
     except RuntimePathError as exc:
@@ -94,6 +100,24 @@ def run() -> int:
     if dup_count:
         print(f"Removed {dup_count} duplicate tweets across timelines")
 
-    new_count, total_count = save_new_tweets(unique, config, cache)
+    reported_artifacts: list[tuple[str, Path]] = []
+    new_count, total_count = save_new_tweets(
+        unique,
+        config,
+        cache,
+        on_artifact=lambda declaration_id, artifact_path: reported_artifacts.append(
+            (declaration_id, artifact_path)
+        ),
+    )
+    write_artifact_report(
+        run_dir,
+        [
+            {
+                "declarationId": declaration_id,
+                "logicalPath": artifact_path.resolve().relative_to(root).as_posix(),
+            }
+            for declaration_id, artifact_path in reported_artifacts
+        ],
+    )
     print(f"\n完成！新增 {new_count} 条，总计 {total_count} 条")
     return 0

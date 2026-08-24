@@ -1,4 +1,5 @@
 import os
+import json
 import sys
 import tempfile
 import unittest
@@ -18,6 +19,7 @@ from src.render.html import render_timeline_html, render_tweet_html
 from src.render.markdown import render_tweet_markdown
 from src.storage.cache import PostCache
 from src.storage.files import save_new_tweets
+from src.runtime_paths import write_artifact_report
 
 
 class TimelineParserTests(unittest.TestCase):
@@ -689,8 +691,13 @@ class DailyBundleStorageTests(unittest.TestCase):
         config = load_config(ROOT / "config.yaml")
 
         bound_root = Path(os.environ["OPENMIND_ROOT"])
+        skill_data_dir = Path(os.environ["OPENMIND_SKILL_DATA_DIR"])
         self.assertEqual(config.storage.output_dir, bound_root / "post")
         self.assertEqual(config.storage.article_output_dir, bound_root / "article")
+        self.assertEqual(config.compat.curl_files, [
+            skill_data_dir / "curl.txt",
+            skill_data_dir / "curl_foryou.txt",
+        ])
 
     def test_save_new_tweets_writes_daily_bundle_files(self):
         with tempfile.TemporaryDirectory() as tempdir:
@@ -718,7 +725,15 @@ class DailyBundleStorageTests(unittest.TestCase):
                 link="https://x.com/bundle_author/status/900",
             )
 
-            new_count, total_count = save_new_tweets([tweet], config, cache)
+            reported: list[tuple[str, Path]] = []
+            new_count, total_count = save_new_tweets(
+                [tweet],
+                config,
+                cache,
+                on_artifact=lambda declaration_id, artifact_path: reported.append(
+                    (declaration_id, artifact_path)
+                ),
+            )
 
             date_dirs = list(config.storage.output_dir.iterdir())
             self.assertEqual(len(date_dirs), 1)
@@ -728,6 +743,36 @@ class DailyBundleStorageTests(unittest.TestCase):
             self.assertTrue((date_dir / "posts.json").exists())
             self.assertTrue((date_dir / "index.html").exists())
             self.assertFalse((date_dir / "900.html").exists())
+            self.assertEqual(reported, [("x-posts", date_dir)])
+
+    def test_write_artifact_report_is_atomic_and_run_scoped(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            run_dir = Path(tempdir) / "run"
+            run_dir.mkdir()
+            report_path = run_dir / "artifacts.json"
+            previous = os.environ.get("OPENMIND_ARTIFACT_REPORT_PATH")
+            os.environ["OPENMIND_ARTIFACT_REPORT_PATH"] = str(report_path)
+            try:
+                write_artifact_report(
+                    run_dir,
+                    [{"declarationId": "x-posts", "logicalPath": "post/20260824"}],
+                )
+            finally:
+                if previous is None:
+                    os.environ.pop("OPENMIND_ARTIFACT_REPORT_PATH", None)
+                else:
+                    os.environ["OPENMIND_ARTIFACT_REPORT_PATH"] = previous
+
+            self.assertEqual(
+                json.loads(report_path.read_text(encoding="utf-8")),
+                {
+                    "schemaVersion": 1,
+                    "artifacts": [
+                        {"declarationId": "x-posts", "logicalPath": "post/20260824"}
+                    ],
+                },
+            )
+            self.assertFalse(any(run_dir.glob(".artifacts.json.tmp-*")))
 
     @patch("src.storage.files._extract_external_articles")
     def test_save_new_tweets_saves_extracted_external_articles_to_article_dir(self, mock_extract):

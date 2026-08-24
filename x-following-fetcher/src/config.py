@@ -128,8 +128,8 @@ class StorageConfig:
 @dataclass(slots=True)
 class CompatConfig:
     curl_file: Path
-    # Kept as a source-layout compatibility field. Installed execution uses
-    # the Broker-injected structured credential JSON instead of curl files.
+    # Credentials live in the private per-Skill data directory. They are
+    # parsed as data by the Python HTTP client and are never shell-executed.
     curl_files: list[Path] = field(default_factory=list)
 
 
@@ -175,7 +175,7 @@ def load_config(
     default_output_dir = root / "post"
     default_article_output_dir = root / "article"
     default_cache_file = data_dir / ".x-following-cache.json"
-    default_curl_file = skill_dir / "curl.txt"
+    default_curl_file = data_dir / "curl.txt"
 
     def resolve_content(raw_path: str, default_path: Path, label: str) -> Path:
         if not raw_path:
@@ -203,9 +203,9 @@ def load_config(
             storage_raw.get("save_external_link_posts_to_article", False)
         ),
     )
-    primary_curl = _resolve_path(skill_dir, str(compat_raw.get("curl_file", "")), default_curl_file)
+    primary_curl = _resolve_path(data_dir, str(compat_raw.get("curl_file", "")), default_curl_file)
     extra_curls = [
-        _resolve_path(skill_dir, str(p), skill_dir / p)
+        _resolve_path(data_dir, str(p), data_dir / p)
         for p in (compat_raw.get("extra_curl_files") or [])
         if isinstance(p, str)
     ]

@@ -12,17 +12,11 @@ display:
 entrypoint:
   runtime: python
   script: main.py
-  env:
-    X_FETCHER_CREDENTIAL_JSON: "{{ secrets.session }}"
 runtime:
   version: ">=3.11,<3.13"
   dependencyFile: pyproject.toml
   lockFile: uv.lock
   packs: [python-core]
-config:
-  session:
-    type: secret-ref
-    secretRef: credential:x-following-session
 capabilities:
   openmind:
     read: [post/**, article/**]
@@ -37,8 +31,8 @@ artifacts:
     type: directory
     path: post/**
   - id: x-articles
-    type: directory
-    path: article/**
+    type: markdown
+    path: article/**/x_*.md
 execution:
   concurrency:
     maxInstances: 1

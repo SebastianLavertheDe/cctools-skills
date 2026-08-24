@@ -8,6 +8,7 @@ import sys
 import tempfile
 from datetime import datetime
 from pathlib import Path
+from typing import Callable
 from urllib.parse import urlparse
 
 from ..config import AppConfig
@@ -22,6 +23,9 @@ from ..render.markdown import (
 from ..render.content import build_title
 from ..serialize import tweet_from_dict, tweet_to_dict
 from .cache import PostCache
+
+
+ArtifactCallback = Callable[[str, Path], None]
 
 
 def _tweet_sort_key(tweet: Tweet) -> tuple[str, str]:
@@ -330,6 +334,7 @@ def _write_external_link_tweet_articles(
     article_date_dir: Path,
     tweets: list[Tweet],
     config: AppConfig,
+    on_artifact: ArtifactCallback | None = None,
 ) -> int:
     if config.storage is None or not config.storage.save_external_link_posts_to_article:
         return 0
@@ -389,6 +394,8 @@ def _write_external_link_tweet_articles(
             )
             written_paths.add(article_path)
             saved_count += 1
+            if on_artifact is not None:
+                on_artifact("x-articles", article_path)
 
         for stale_path in stale_paths:
             if stale_path not in written_paths:
@@ -397,7 +404,12 @@ def _write_external_link_tweet_articles(
     return saved_count
 
 
-def save_new_tweets(tweets: list[Tweet], config: AppConfig, cache: PostCache) -> tuple[int, int]:
+def save_new_tweets(
+    tweets: list[Tweet],
+    config: AppConfig,
+    cache: PostCache,
+    on_artifact: ArtifactCallback | None = None,
+) -> tuple[int, int]:
     if config.storage is None:
         raise RuntimeError("missing storage config")
 
@@ -421,10 +433,15 @@ def save_new_tweets(tweets: list[Tweet], config: AppConfig, cache: PostCache) ->
     enrich_tweets_media(merged_tweets)
     cache_tweet_videos(date_dir, merged_tweets, config)
     _write_daily_bundle(date_dir, merged_tweets, config)
+    if on_artifact is not None:
+        # The daily directory is one coherent output bundle (JSON, HTML and
+        # optional media), so report the directory once rather than every file.
+        on_artifact("x-posts", date_dir)
     saved_articles = _write_external_link_tweet_articles(
         config.storage.article_output_dir / date_str,
         merged_tweets,
         config,
+        on_artifact,
     )
 
     for tweet in merged_tweets:

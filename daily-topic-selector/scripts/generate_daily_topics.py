@@ -1051,30 +1051,62 @@ def build_post_block(index: int, post: PostItem) -> str:
     )
 
 
-def build_post_summary_prompts(post_blocks: List[str]) -> Tuple[str, str]:
-    system_prompt = (
-        "你是资深中文科技编辑，负责总结当天 X/Twitter 时间线。"
-        "必须严格基于候选帖子内容判断，不可编造作者、产品、链接或结论。"
-        "请优先提炼 AI、开发者工具、产品发布、模型更新、Agent 工程、行业讨论 相关的高信号动态。"
-        "GitHub 仓库、开源工具、开源插件、SDK、CLI、框架、开发者库等推荐类帖子要作为开源项目推荐保留。"
-        "忽略纯灌水、单纯情绪宣泄、无信息增量的转述。"
-        "对重点作者可以适度优先，但绝不能因为作者身份牺牲内容质量。"
-        "输出中文要去掉 AI 味：不要使用“不是...但是...”“应该...而非...”“在于...而非...”“不在于...而在于...”“不...而...”“不...而是...”“不...而在于...”“不是...而是...”“不只有...还有...”“之所以...是因为...”“既是...也是...”等模板化句式；不要写先否定再转折的句子，直接说产品、动作、结论和影响。"
-    )
+POST_EDITOR_SYSTEM_PROMPT = (
+    "你是资深中文科技编辑，负责总结当天 X/Twitter 时间线。"
+    "必须严格基于候选帖子内容判断，不可编造作者、产品、链接或结论。"
+    "请优先提炼 AI、开发者工具、产品发布、模型更新、Agent 工程、行业讨论 相关的高信号动态。"
+    "GitHub 仓库、开源工具、开源插件、SDK、CLI、框架、开发者库等推荐类帖子要作为开源项目推荐保留。"
+    "忽略纯灌水、单纯情绪宣泄、无信息增量的转述。"
+    "对重点作者可以适度优先，但绝不能因为作者身份牺牲内容质量。"
+    "输出中文要去掉 AI 味：不要使用“不是...但是...”“应该...而非...”“在于...而非...”“不在于...而在于...”“不...而...”“不...而是...”“不...而在于...”“不是...而是...”“不只有...还有...”“之所以...是因为...”“既是...也是...”等模板化句式；不要写先否定再转折的句子，直接说产品、动作、结论和影响。"
+)
 
+POST_FIRST_PASS_MAX_PICKS = 6
+
+
+def build_post_first_pass_prompts(
+    chunk_index: int,
+    chunk_total: int,
+    post_blocks: List[str],
+) -> Tuple[str, str]:
     user_prompt = f"""
-请阅读以下候选帖子，输出一份“当天 Post 总结”。
+这是全天 X/Twitter 时间线第 {chunk_index}/{chunk_total} 段切片。请阅读以下候选帖子，从本段挑出值得进入“当天 Post 总结”的帖子。
+
+要求：
+1. 只根据帖子内容本身判断：AI 产品/模型/功能发布、开源项目推荐、Agent/AI 工程、开发者工作流、大厂动态、融资、有信息增量的行业观点。互动量高低不作为筛选依据。
+2. 最多挑 {POST_FIRST_PASS_MAX_PICKS} 条，宁缺毋滥，不要凑数。
+3. 本段内讲同一件事的多条帖子，只保留信息增量最大的一条。
+4. 纯转发、情绪吐槽、版权抱怨等没有新增信息的帖子不要选。
+5. 摘要用中文，去掉 AI 味：不要使用“不是...而是...”等先否定再转折的模板句，直接说产品、动作、结论和影响。
+
+输出必须是严格 JSON，格式如下：
+{{
+  "highlights": [
+    {{"index": 3, "summary": "......"}},
+    {{"index": 8, "summary": "......"}}
+  ]
+}}
+
+约束：
+- 只能引用给定 index。
+- highlights 不可重复。
+- 只输出 JSON，不要输出其他说明。
+
+候选帖子：
+{chr(10).join(post_blocks)}
+"""
+    return POST_EDITOR_SYSTEM_PROMPT, user_prompt
+
+
+def build_post_summary_prompts(post_blocks: List[str]) -> Tuple[str, str]:
+    user_prompt = f"""
+以下候选帖子来自第一轮对全天各时间段切片的初筛，均已附上初筛摘要。请全局复核，输出一份“当天 Post 总结”。
 
 要求：
 1. `overview`：用 2-3 句话总结今天时间线的整体氛围与主线，适合写进日报。
 2. `themes`：提炼 3-5 条今日主线，每条不超过 18 个字。
-3. `highlights`：挑出你认为真正值得关注的帖子，给出对应 `index` 和一句中文总结。不设固定上限，但不要凑数。
-4. highlight 优先级：
-   - AI 产品/模型/功能发布
-   - 开源项目推荐 / GitHub 热门项目 / 开源工具
-   - Agent / AI 工程 / 开发者工作流
-   - 大厂动态 / 融资 / 战略信号
-   - 容易引发讨论的行业观点
+3. `highlights`：从候选中挑出真正值得关注的帖子，给出对应 `index` 和一句中文总结。不设固定上限，但不要凑数。
+4. 多条候选讲同一件事时，只保留信息增量最大的一条，其余删除。
 5. 对候选中标记为“重点作者: 是”的帖子可以适度优先，因为这些作者通常更稳定地产出高信号内容。
 6. 但不要把“重点作者”当成白名单。非重点作者如果帖子质量更高、信息增量更强，依然应该入选。
 7. 如果某条只是转发、情绪吐槽、版权抱怨但没有新增信息，尽量不要入选。
@@ -1098,15 +1130,27 @@ def build_post_summary_prompts(post_blocks: List[str]) -> Tuple[str, str]:
 候选帖子：
 {chr(10).join(post_blocks)}
 """
-    return system_prompt, user_prompt
+    return POST_EDITOR_SYSTEM_PROMPT, user_prompt
 
 
-def request_post_summary(
+def build_post_final_block(index: int, post: PostItem, first_pass_summary: str) -> str:
+    return "\n".join(
+        [
+            f"[{index}] 作者: {post.author_name} (@{post.author_screen_name}){' verified' if post.verified else ''}",
+            f"重点作者: {'是' if is_priority_post_author(post) else '否'}",
+            f"互动: likes={post.likes}, reposts={post.reposts}, replies={post.replies}, quotes={post.quotes}, bookmarks={post.bookmarks}",
+            f"初筛摘要: {first_pass_summary}",
+            f"内容: {post.content[:200]}",
+        ]
+    )
+
+
+def request_post_json(
     provider_configs: List[Tuple[str, str, str, str]],
-    post_blocks: List[str],
+    system_prompt: str,
+    user_prompt: str,
+    stage_label: str,
 ) -> Tuple[Dict[str, object], str, str]:
-    system_prompt, user_prompt = build_post_summary_prompts(post_blocks)
-
     parsed = None
     raw = ""
     provider_name = ""
@@ -1129,7 +1173,7 @@ def request_post_summary(
 
     if parsed is None:
         raise RuntimeError(
-            "All AI providers failed for post summary: " + " | ".join(errors)
+            f"All AI providers failed for {stage_label}: " + " | ".join(errors)
         )
 
     return parsed, provider_name, model
@@ -1306,12 +1350,104 @@ def summarize_posts_with_ai(
         if cached is not None and isinstance(cached, dict):
             return cached, "", ""
 
-    post_blocks = [
-        build_post_block(i, post) for i, post in enumerate(candidates, start=1)
+    # 分块前按时间排序：同一波讨论会落在同一切片里，第一轮就能完成片内去重。
+    ordered = sorted(candidates, key=lambda post: (post.created_at, post.tweet_id))
+    post_chunks: List[Tuple[int, List[PostItem]]] = [
+        (index, ordered[index : index + FIRST_PASS_CHUNK_SIZE])
+        for index in range(0, len(ordered), FIRST_PASS_CHUNK_SIZE)
     ]
-    parsed, provider_name, model = request_post_summary(
+    chunk_total = len(post_chunks)
+
+    def _run_post_chunk(
+        chunk_index: int, chunk_posts: List[PostItem]
+    ) -> Tuple[int, List[Tuple[PostItem, str]], str, str]:
+        chunk_blocks = [
+            build_post_block(i, post) for i, post in enumerate(chunk_posts, start=1)
+        ]
+        system_prompt, user_prompt = build_post_first_pass_prompts(
+            chunk_index, chunk_total, chunk_blocks
+        )
+        parsed, chunk_provider, chunk_model = request_post_json(
+            provider_configs=provider_configs,
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            stage_label=f"post summary first pass (chunk {chunk_index}/{chunk_total})",
+        )
+        raw_picks = parsed.get("highlights", [])
+        picked: List[Tuple[PostItem, str]] = []
+        used_indices: set = set()
+        if isinstance(raw_picks, list):
+            for item in raw_picks:
+                if not isinstance(item, dict):
+                    continue
+                idx = item.get("index")
+                if (
+                    not isinstance(idx, int)
+                    or idx < 1
+                    or idx > len(chunk_posts)
+                    or idx in used_indices
+                ):
+                    continue
+                summary = normalize_whitespace(str(item.get("summary", "")))
+                if not summary:
+                    continue
+                used_indices.add(idx)
+                picked.append((chunk_posts[idx - 1], summary))
+        return chunk_index, picked, chunk_provider, chunk_model
+
+    chunk_results: List[Tuple[int, List[Tuple[PostItem, str]], str, str]] = []
+    if len(post_chunks) > 1 and FIRST_PASS_CONCURRENCY > 1:
+        with ThreadPoolExecutor(max_workers=FIRST_PASS_CONCURRENCY) as pool:
+            futures = [
+                pool.submit(_run_post_chunk, chunk_index, chunk_posts)
+                for chunk_index, chunk_posts in post_chunks
+            ]
+            for future in futures:
+                chunk_results.append(future.result())
+    else:
+        for chunk_index, chunk_posts in post_chunks:
+            chunk_results.append(_run_post_chunk(chunk_index, chunk_posts))
+
+    chunk_results.sort(key=lambda item: item[0])
+    used_links = set()
+    merged: List[Tuple[PostItem, str]] = []
+    used_provider = ""
+    used_model = ""
+    for _, picked, chunk_provider, chunk_model in chunk_results:
+        if chunk_provider:
+            used_provider = chunk_provider
+            used_model = chunk_model
+        for post, summary in picked:
+            normalized_link = normalize_url(post.link)
+            if normalized_link:
+                if normalized_link in used_links:
+                    continue
+                used_links.add(normalized_link)
+            merged.append((post, summary))
+
+    if not merged:
+        return (
+            {
+                "overview": "",
+                "themes": [],
+                "highlights": [],
+                "source_count": len(posts),
+                "candidate_count": len(candidates),
+            },
+            used_provider,
+            used_model,
+        )
+
+    final_blocks = [
+        build_post_final_block(i, post, summary)
+        for i, (post, summary) in enumerate(merged, start=1)
+    ]
+    system_prompt, user_prompt = build_post_summary_prompts(final_blocks)
+    parsed, used_provider, used_model = request_post_json(
         provider_configs=provider_configs,
-        post_blocks=post_blocks,
+        system_prompt=system_prompt,
+        user_prompt=user_prompt,
+        stage_label="post summary final pass",
     )
 
     overview = normalize_whitespace(str(parsed.get("overview", "")))
@@ -1334,7 +1470,7 @@ def summarize_posts_with_ai(
             if (
                 not isinstance(idx, int)
                 or idx < 1
-                or idx > len(candidates)
+                or idx > len(merged)
                 or idx in used
             ):
                 continue
@@ -1342,7 +1478,7 @@ def summarize_posts_with_ai(
             summary = normalize_whitespace(str(item.get("summary", "")))
             if not summary:
                 continue
-            post = candidates[idx - 1]
+            post, _first_pass_summary = merged[idx - 1]
             highlights.append(
                 {
                     "author_name": post.author_name,
@@ -1357,7 +1493,7 @@ def summarize_posts_with_ai(
         "themes": themes,
         "highlights": highlights,
         "source_count": len(posts),
-        "candidate_count": len(candidates),
+        "candidate_count": len(merged),
     }
     if cache_dir is not None and date_str:
         _write_cache_entry(
@@ -1367,7 +1503,7 @@ def summarize_posts_with_ai(
             "summarize_posts_with_ai",
             result,
         )
-    return result, provider_name, model
+    return result, used_provider, used_model
 
 
 def build_output_md(
@@ -1764,6 +1900,8 @@ def main() -> None:
     print(f"Selected Reddit posts: {len(reddit_items)}")
     if post_summary:
         print(f"Post summary highlights: {len(post_summary.get('highlights', []))}")
+    if _post_err:
+        print(f"Post summary error: {_post_err}")
     if reddit_summary_section:
         print("Reddit summary: filtered with community-signal rules")
         print(f"Reddit AI provider: {reddit_provider}")

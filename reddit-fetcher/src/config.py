@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import hashlib
+import os
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import unquote, urlparse
 
 import yaml
 
@@ -41,7 +44,9 @@ def load_config(
     content_root: str | None = None,
     skill_data_dir: str | None = None,
 ) -> AppConfig:
-    config_abs = Path(config_path).expanduser().resolve()
+    skill_root = Path(__file__).resolve().parents[1]
+    config_candidate = Path(config_path).expanduser()
+    config_abs = (config_candidate if config_candidate.is_absolute() else skill_root / config_candidate).resolve()
     with open(config_abs, "r", encoding="utf-8") as handle:
         raw = yaml.safe_load(handle) or {}
 
@@ -50,6 +55,7 @@ def load_config(
 
     root = require_content_root(content_root)
     data_dir = require_skill_data_dir(skill_data_dir)
+    sources = _load_user_sources(data_dir, skill_root, fetch_raw.get("sources", []))
 
     # Default output_dir: <content_root>/reddit
     output_dir_raw = storage_raw.get("output_dir", "")
@@ -82,10 +88,97 @@ def load_config(
             comment_retry_count=int(fetch_raw.get("comment_retry_count", 2)),
             request_delay_seconds=float(fetch_raw.get("request_delay_seconds", 0.2)),
             rss_only=bool(fetch_raw.get("rss_only", True)),
-            sources=list(fetch_raw.get("sources", [])),
+            sources=sources,
         ),
         storage=StorageConfig(
             output_dir=output_dir,
             cache_file=cache_file,
         ),
     )
+
+
+def _load_user_sources(data_dir: Path, skill_root: Path, packaged_sources: object) -> list[str]:
+    defaults = _validate_sources(packaged_sources, "package config fetch.sources")
+    # Bare source-tree execution historically uses the package directory as its
+    # data directory. Keep that developer flow read-only and use package defaults
+    # directly; installed runs always receive a separate managed data directory.
+    if data_dir.resolve() == skill_root.resolve():
+        return defaults
+
+    source_file = data_dir / "user-sources.yaml"
+    if not source_file.exists():
+        _write_sources_if_missing(source_file, defaults)
+    try:
+        with open(source_file, "r", encoding="utf-8") as handle:
+            document = yaml.safe_load(handle) or {}
+    except OSError as exc:
+        raise ValueError(f"Unable to read persistent Reddit sources: {source_file}") from exc
+    if not isinstance(document, dict):
+        raise ValueError(f"Unsupported persistent Reddit source schema: {source_file}")
+    schema_version = document.get("schemaVersion", 1)
+    if schema_version == 1:
+        return _validate_sources(document.get("sources"), f"{source_file} sources")
+    if schema_version == 2:
+        return _validate_structured_sources(document.get("sources"), f"{source_file} sources")
+    raise ValueError(f"Unsupported persistent Reddit source schema: {source_file}")
+
+
+def _validate_sources(value: object, label: str) -> list[str]:
+    if not isinstance(value, list) or not all(isinstance(item, str) and item.strip() for item in value):
+        raise ValueError(f"{label} must be a list of non-empty URLs")
+    return [item.strip() for item in value]
+
+
+def _validate_structured_sources(value: object, label: str) -> list[str]:
+    if not isinstance(value, list):
+        raise ValueError(f"{label} must be a list")
+    enabled_urls: list[str] = []
+    for item in value:
+        if not isinstance(item, dict):
+            raise ValueError(f"{label} entries must be objects")
+        url = item.get("url")
+        if not isinstance(url, str) or not url.strip():
+            raise ValueError(f"{label} entries must contain a non-empty URL")
+        if item.get("enabled", True) is not False:
+            enabled_urls.append(url.strip())
+    return enabled_urls
+
+
+def _write_sources_if_missing(target: Path, sources: list[str]) -> None:
+    target.parent.mkdir(parents=True, exist_ok=True)
+    payload = yaml.safe_dump(
+        {
+            "schemaVersion": 2,
+            "sources": [_default_source_entry(source) for source in sources],
+        },
+        allow_unicode=True,
+        sort_keys=False,
+    ).encode("utf-8")
+    try:
+        fd = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    except FileExistsError:
+        return
+    try:
+        with os.fdopen(fd, "wb") as output:
+            output.write(payload)
+    except Exception:
+        try:
+            target.unlink()
+        except OSError:
+            pass
+        raise
+
+
+def _default_source_entry(url: str) -> dict[str, object]:
+    normalized = url.strip()
+    parsed = urlparse(normalized)
+    parts = [unquote(part) for part in parsed.path.split("/") if part]
+    name = f"r/{parts[1]}" if len(parts) >= 2 and parts[0].lower() == "r" else parsed.hostname or "Reddit community"
+    return {
+        "id": hashlib.sha1(f"reddit:{normalized}".encode("utf-8")).hexdigest(),
+        "name": name,
+        "url": normalized,
+        "enabled": True,
+        "frequency": "每日流水线",
+        "tags": ["社区"],
+    }

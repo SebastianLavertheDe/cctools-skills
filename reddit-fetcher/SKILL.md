@@ -53,12 +53,19 @@ uv run python scripts/fetch_comments.py 'https://www.reddit.com/r/artificial/com
 
 ## Configuration
 
-Edit `config.yaml` to:
+Official fetch behavior remains in the package `config.yaml` and is updated with
+the Skill. On first managed run, its `fetch.sources` list is seeded into
+`$OPENMIND_SKILL_DATA_DIR/user-sources.yaml`. The desktop configuration page
+reads and writes that persistent file, where you can:
 
-- add or remove subreddit JSON URLs
-- change timeout / user-agent
-- change output directory
-- toggle `fetch.fetch_comments` if you explicitly want comment fetching during subreddit runs
+- add or edit subreddit JSON URLs
+- enable or disable individual communities
+
+Continue to change package `config.yaml` only when developing the Skill itself:
+
+- change timeout / user-agent defaults
+- change output directory defaults
+- toggle the default `fetch.fetch_comments` behavior
 
 Default behavior:
 
@@ -68,6 +75,8 @@ Default behavior:
 The default output root is `$OPENMIND_ROOT/reddit`. The installed entrypoint
 receives `OPENMIND_ROOT`, `OPENMIND_SKILL_DATA_DIR` and `OPENMIND_RUN_DIR`
 from the desktop app; it never discovers a project by walking parent folders.
+Package updates replace code and official defaults but preserve
+`user-sources.yaml` verbatim.
 
 For direct execution, bind an explicit `--content-root` and `--skill-data-dir`
 (or set the corresponding `OPENMIND_*` environment values).

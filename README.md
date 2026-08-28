@@ -37,7 +37,7 @@ https://github.com/SebastianLavertheDe/cctools-skills.git
 Skill 通过环境变量绑定数据与配置（与仓库位置解耦）。内容根是**用户在 openmind-app 里自选的数据根**（即数据仓根本身，扁平布局：`article/`、`post/` 等内容目录直接在根下）：
 
 - `OPENMIND_ROOT`：内容根（唯一契约名）
-- `OPENMIND_SKILL_DATA_DIR`：单个 Skill 的私有缓存目录；openmind-app Broker 自动注入，工作流和 cron wrapper 默认使用对应 Skill 目录
+- `OPENMIND_SKILL_DATA_DIR`：单个 Skill 的持久化私有数据目录（用户来源、缓存、登录状态等）；openmind-app Broker 自动注入，工作流和 cron wrapper 默认使用对应 Skill 目录，Skill 包更新不会覆盖
 - `OPENMIND_RUN_DIR`：Broker 为单次运行注入的临时运行目录
 - `OPENMIND_PROVIDER_*` / `OPENMIND_PROVIDERS_FILE`：AI provider 绑定（`config/providers.yaml`，含密钥，不入库）
 - openmind-app 安装运行时由 Broker 自动注入；crontab 直跑时需显式设置内容根与 provider 文件

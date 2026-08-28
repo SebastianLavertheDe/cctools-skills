@@ -50,14 +50,35 @@ class RSSConfig:
         return str(resolve_content_path(raw, self.content_root, "article_base_dir"))
 
     def get_opml_file(self) -> str:
-        """Get OPML file path"""
+        """Get the persistent OPML path, seeding package defaults once."""
         raw = str(self.config.get('opml_file', 'subscriptions.opml'))
         if raw.startswith(("http://", "https://")):
             return raw
         candidate = Path(raw).expanduser()
-        if not candidate.is_absolute():
-            candidate = self.skill_root / candidate
-        return str(candidate.resolve())
+        if candidate.is_absolute():
+            return str(candidate.resolve())
+        persistent = resolve_data_path(raw, self.skill_data_dir, "RSS subscriptions")
+        self._seed_packaged_opml_files(candidate, persistent)
+        return str(persistent)
+
+    def _seed_packaged_opml_files(self, configured_relative: Path, persistent: Path) -> None:
+        """Copy packaged OPML defaults only when persistent files are absent."""
+        packaged = (self.skill_root / configured_relative).resolve()
+        try:
+            packaged.relative_to(self.skill_root.resolve())
+        except ValueError as exc:
+            raise ValueError(f"opml_file must stay inside Skill data: {configured_relative}") from exc
+        _copy_file_if_missing(packaged, persistent)
+
+        # The default subscriptions file may reference sibling OPML collections
+        # such as subscriptions.wechat.opml. Seed each one independently so an
+        # official package can add a new auxiliary file without replacing any
+        # existing user-owned file.
+        for packaged_dependency in self.skill_root.glob("subscriptions*.opml"):
+            if not packaged_dependency.is_file() or packaged_dependency == packaged:
+                continue
+            target = resolve_data_path(packaged_dependency.name, self.skill_data_dir, "RSS subscription dependency")
+            _copy_file_if_missing(packaged_dependency, target)
 
     def get_cache_file(self) -> str:
         return str(resolve_data_path("article_cache.json", self.skill_data_dir, "article cache"))
@@ -84,3 +105,22 @@ class RSSConfig:
     def get_translation_settings(self) -> Dict:
         """Get translation settings"""
         return self.config.get('translation', {'enabled': False, 'provider': 'deepseek'})
+
+
+def _copy_file_if_missing(source: Path, target: Path) -> None:
+    if target.exists() or not source.is_file() or source.resolve() == target.resolve():
+        return
+    target.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        fd = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    except FileExistsError:
+        return
+    try:
+        with os.fdopen(fd, "wb") as output:
+            output.write(source.read_bytes())
+    except Exception:
+        try:
+            target.unlink()
+        except OSError:
+            pass
+        raise

@@ -21,8 +21,9 @@ timeoutMs: 7200000
 ---
 
 Desktop App contract: use `cctools.skill.yaml` as the runnable contract.
-Article/post output is resolved below `OPENMIND_ROOT`, while cache and
-counter state are below `OPENMIND_SKILL_DATA_DIR`; Provider Profile values
+Article/post output is resolved below `OPENMIND_ROOT`, while subscriptions,
+nested OPML collections, cache and counter state are below
+`OPENMIND_SKILL_DATA_DIR`; Provider Profile values
 arrive through neutral `OPENMIND_PROVIDER_*` bindings. AI adapters are
 vendored inside this Skill's `src/` package and do not import the workspace
 `_shared` directory.
@@ -48,9 +49,13 @@ uv run --env-file .env python main.py        # --env-file 仅当 .env 存在时�
 
 ## Configuration
 
-### 1. OPML File (subscriptions.opml)
+### 1. OPML File (`$OPENMIND_SKILL_DATA_DIR/subscriptions.opml`)
 
-Define your RSS subscriptions in OPML format:
+On first managed run, the package `subscriptions.opml` is copied into the
+Skill data directory. Edit the persistent copy there; later package updates
+replace code and packaged defaults without replacing the user's subscriptions.
+
+Define RSS subscriptions in OPML format:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -66,7 +71,8 @@ Define your RSS subscriptions in OPML format:
 </opml>
 ```
 
-You can also keep large feed collections in a separate local OPML file and reference it from the main `subscriptions.opml`:
+You can also keep large feed collections in a separate local OPML file in the
+same Skill data directory and reference it from the main `subscriptions.opml`:
 
 ```xml
 <outline

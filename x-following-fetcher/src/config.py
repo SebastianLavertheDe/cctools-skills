@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ast
 import os
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -209,9 +210,21 @@ def load_config(
         for p in (compat_raw.get("extra_curl_files") or [])
         if isinstance(p, str)
     ]
+    numbered_curls = sorted(
+        (
+            candidate
+            for candidate in data_dir.glob("curl_*.txt")
+            if re.fullmatch(r"curl_(\d+)\.txt", candidate.name, re.IGNORECASE)
+        ),
+        key=lambda candidate: int(re.fullmatch(r"curl_(\d+)\.txt", candidate.name, re.IGNORECASE).group(1)),
+    )
+    curl_files: list[Path] = []
+    for candidate in [primary_curl, *extra_curls, *numbered_curls]:
+        if candidate not in curl_files:
+            curl_files.append(candidate)
     compat = CompatConfig(
         curl_file=primary_curl,
-        curl_files=[primary_curl] + [p for p in extra_curls if p != primary_curl],
+        curl_files=curl_files,
     )
 
     return AppConfig(

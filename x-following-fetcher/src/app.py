@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import argparse
 import os
+import random
+import time
 from pathlib import Path
 
-from .config import load_config
+from .config import AppConfig, load_config
 from .fetcher.client import FetchError, fetch_timelines
+from .models import Tweet
 from .parser.timeline import parse_timeline_payload
 from .storage.cache import PostCache
 from .storage.files import save_new_tweets
@@ -37,6 +40,32 @@ def _ensure_local_cron_bindings() -> None:
             break
 
 
+def _fetch_all_tweets(config: AppConfig, credential_files: list[Path | None]) -> list[Tweet]:
+    all_tweets: list[Tweet] = []
+    for index, credential_file in enumerate(credential_files):
+        if index:
+            delay_seconds = random.uniform(5, 10)
+            print(f"Waiting {delay_seconds:.1f}s before the next cURL...")
+            time.sleep(delay_seconds)
+
+        label = credential_file.stem if credential_file is not None else "managed-credential"
+        print(f"Fetching timeline from {label}...")
+        try:
+            responses = fetch_timelines(config, credential_file)
+        except FetchError as exc:
+            print(f"  Failed: {exc}")
+            continue
+
+        for response in responses:
+            tweets = parse_timeline_payload(
+                response.payload,
+                include_promoted=config.fetch.include_promoted,
+            )
+            print(f"  Got {len(tweets)} tweets from {response.label}")
+            all_tweets.extend(tweets)
+    return all_tweets
+
+
 def run() -> int:
     print("Fetching latest posts from X (Twitter)...\n")
 
@@ -57,7 +86,6 @@ def run() -> int:
         parser.error(str(exc))
     cache = PostCache(config.storage.cache_file)
 
-    all_tweets = []
     managed_credential = os.environ.get("X_FETCHER_CREDENTIAL_JSON", "").strip()
     if managed_credential:
         credential_files = [None]
@@ -67,22 +95,7 @@ def run() -> int:
             if not curl_file.exists():
                 print(f"Skipping {curl_file.name}: not found")
 
-    for credential_file in credential_files:
-        label = credential_file.stem if credential_file is not None else "managed-credential"
-        print(f"Fetching timeline from {label}...")
-        try:
-            responses = fetch_timelines(config, credential_file)
-        except FetchError as exc:
-            print(f"  Failed: {exc}")
-            continue
-
-        for response in responses:
-            tweets = parse_timeline_payload(
-                response.payload,
-                include_promoted=config.fetch.include_promoted,
-            )
-            print(f"  Got {len(tweets)} tweets from {response.label}")
-            all_tweets.extend(tweets)
+    all_tweets = _fetch_all_tweets(config, credential_files)
 
     if not all_tweets:
         print("Failed to fetch tweets. No usable entries from any timeline.")

@@ -68,7 +68,7 @@ FIRST_PASS_CHUNK_SIZE = 40
 # LLM calls are network IO and go through the package-local stateless AI client,
 # so it is safe to run multiple chunks in parallel. Keep workers bounded to avoid hitting
 # provider rate limits.
-FIRST_PASS_CONCURRENCY = int(os.environ.get("DTS_FIRST_PASS_WORKERS", "5"))
+FIRST_PASS_CONCURRENCY = int(os.environ.get("DTS_FIRST_PASS_WORKERS", "1"))
 
 WECHAT_SOURCE_MARKERS = (
     "mp.weixin.qq.com",
@@ -967,29 +967,41 @@ def select_reddit_items_with_ai(
     if not first_pass_candidates:
         return [], used_provider, used_model
 
-    final_blocks = [
-        build_reddit_block(i, item)
-        for i, item in enumerate(first_pass_candidates, start=1)
-    ]
-    final_indices, used_provider, used_model = request_reddit_indices(
-        provider_configs=provider_configs,
-        reddit_blocks=final_blocks,
-        max_posts=max_posts,
-        stage_label="第二轮 Reddit 社区信号复筛（全局复核）",
-        extra_instruction=(
-            "这是第二轮全局复核。请删除重复、低信息量、只适合闲聊的帖子，"
-            "保留最适合传播的 AI 产品/模型/功能发布、Agent 工程、开发者工作流、"
-            "大厂动态、AI技巧、Prompt技巧和行业观点。"
-        ),
+    reddit_second_instruction = (
+        "这是第二轮全局复核。请删除重复、低信息量、只适合闲聊的帖子，"
+        "保留最适合传播的 AI 产品/模型/功能发布、Agent 工程、开发者工作流、"
+        "大厂动态、AI技巧、Prompt技巧和行业观点。"
     )
-
     out: List[Dict[str, str]] = []
     used_final = set()
-    for idx in final_indices:
-        if idx < 1 or idx > len(first_pass_candidates) or idx in used_final:
-            continue
-        used_final.add(idx)
-        out.append(first_pass_candidates[idx - 1])
+    total = len(first_pass_candidates)
+    for chunk_start in range(0, total, FIRST_PASS_CHUNK_SIZE):
+        chunk = first_pass_candidates[chunk_start : chunk_start + FIRST_PASS_CHUNK_SIZE]
+        chunk_blocks = [
+            build_reddit_block(i, item) for i, item in enumerate(chunk, start=1)
+        ]
+        chunk_end = chunk_start + len(chunk)
+        if total <= FIRST_PASS_CHUNK_SIZE:
+            stage_label = "第二轮 Reddit 社区信号复筛（全局复核）"
+        else:
+            stage_label = (
+                f"第二轮 Reddit 社区信号复筛（候选 {chunk_start + 1}-{chunk_end} / 共 {total}）"
+            )
+        final_indices, used_provider, used_model = request_reddit_indices(
+            provider_configs=provider_configs,
+            reddit_blocks=chunk_blocks,
+            max_posts=max_posts,
+            stage_label=stage_label,
+            extra_instruction=reddit_second_instruction,
+        )
+        for idx in final_indices:
+            if idx < 1 or idx > len(chunk):
+                continue
+            global_idx = chunk_start + idx
+            if global_idx in used_final:
+                continue
+            used_final.add(global_idx)
+            out.append(first_pass_candidates[global_idx - 1])
 
     if max_posts > 0:
         out = out[:max_posts]
@@ -1273,28 +1285,43 @@ def select_topics_with_ai(
     if not first_pass_candidates:
         return {"wechat": []}, used_provider, used_model
 
-    final_topic_blocks = [
-        build_topic_block(i, topic)
-        for i, topic in enumerate(first_pass_candidates, start=1)
-    ]
-    final_indices, used_provider, used_model = request_selected_indices(
-        provider_configs=provider_configs,
-        topic_blocks=final_topic_blocks,
-        min_fit_score=min_fit_score,
-        min_ai_score=min_ai_score,
-        min_viral_score=min_viral_score,
-        min_breakout_score=min_breakout_score,
-        stage_label="第二轮复筛（全局复核）",
-        extra_instruction="这是第二轮全局复核。请删除重复事件、边缘项、低传播价值项，只保留真正同时满足 AI相关性、传播价值、独立成文价值、以及AI圈爆款潜力的主题。",
+    topic_second_instruction = (
+        "这是第二轮全局复核。请删除重复事件、边缘项、低传播价值项，"
+        "只保留真正同时满足 AI相关性、传播价值、独立成文价值、以及AI圈爆款潜力的主题。"
     )
-
     out: List[Tuple[Topic, List[str]]] = []
     used_indices = set()
-    for idx in final_indices:
-        if idx < 1 or idx > len(first_pass_candidates) or idx in used_indices:
-            continue
-        used_indices.add(idx)
-        out.append((first_pass_candidates[idx - 1], []))
+    total = len(first_pass_candidates)
+    for chunk_start in range(0, total, FIRST_PASS_CHUNK_SIZE):
+        chunk = first_pass_candidates[chunk_start : chunk_start + FIRST_PASS_CHUNK_SIZE]
+        chunk_blocks = [
+            build_topic_block(i, topic) for i, topic in enumerate(chunk, start=1)
+        ]
+        chunk_end = chunk_start + len(chunk)
+        if total <= FIRST_PASS_CHUNK_SIZE:
+            stage_label = "第二轮复筛（全局复核）"
+        else:
+            stage_label = (
+                f"第二轮复筛（候选 {chunk_start + 1}-{chunk_end} / 共 {total}）"
+            )
+        final_indices, used_provider, used_model = request_selected_indices(
+            provider_configs=provider_configs,
+            topic_blocks=chunk_blocks,
+            min_fit_score=min_fit_score,
+            min_ai_score=min_ai_score,
+            min_viral_score=min_viral_score,
+            min_breakout_score=min_breakout_score,
+            stage_label=stage_label,
+            extra_instruction=topic_second_instruction,
+        )
+        for idx in final_indices:
+            if idx < 1 or idx > len(chunk):
+                continue
+            global_idx = chunk_start + idx
+            if global_idx in used_indices:
+                continue
+            used_indices.add(global_idx)
+            out.append((first_pass_candidates[global_idx - 1], []))
 
     source_order = {id(topic): idx for idx, topic in enumerate(topics)}
     out.sort(key=lambda pair: source_order[id(pair[0])])
@@ -1863,7 +1890,7 @@ def main() -> None:
                 str(exc),
             )
 
-    with ThreadPoolExecutor(max_workers=3) as pool:
+    with ThreadPoolExecutor(max_workers=1) as pool:
         topic_future = pool.submit(topic_task)
         reddit_future = pool.submit(reddit_task)
         post_future = pool.submit(_post_task)

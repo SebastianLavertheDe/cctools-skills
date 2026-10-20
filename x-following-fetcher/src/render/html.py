@@ -179,7 +179,7 @@ def _tweet_card(tweet: Tweet, config: RenderConfig, *, detail_href: str | None =
     title = build_title(tweet.title, content, config.title_max_length)
     title_markup = f'<h1 class="tweet-title">{html.escape(title)}</h1>' if should_render_title(title, content) else ""
     image_markup = _image_grid([media for media in tweet.media if media.media_type == "photo"] if config.include_images else [])
-    other_media_markup = _non_photo_media(tweet.media)
+    other_media_markup = _non_photo_media(tweet.media) if config.include_images else ""
     quote_markup = _quote_card(tweet.quoted_tweet, config.expand_urls) if config.include_quotes else ""
     detail_link = detail_href or tweet.link
     retweet_badge = ""

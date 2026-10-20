@@ -106,7 +106,7 @@ def _generate_video_thumbnail(video_path: Path) -> bool:
 
 
 def cache_tweet_videos(date_dir: Path, tweets: list[Tweet], config: AppConfig) -> None:
-    if config.storage is None:
+    if config.storage is None or not config.render.include_images:
         return
 
     for tweet in tweets:

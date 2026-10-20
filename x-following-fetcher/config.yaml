@@ -7,7 +7,7 @@ fetch:
 
 render:
   include_metrics: true
-  include_images: true
+  include_images: false
   expand_urls: true
   include_retweets: true
   include_quotes: true

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "origin": "preset",
+  "presetId": "om-mini-tool",
+  "category": "web",
+  "inputHint": "",
+  "executionModel": null,
+  "dependencies": [],
+  "capabilityMode": "session"
+}

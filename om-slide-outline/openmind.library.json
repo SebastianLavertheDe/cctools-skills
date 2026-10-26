@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "origin": "preset",
+  "presetId": "om-slide-outline",
+  "category": "slides",
+  "inputHint": "",
+  "executionModel": null,
+  "dependencies": [],
+  "capabilityMode": "session"
+}

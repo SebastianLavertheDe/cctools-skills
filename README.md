@@ -2,6 +2,8 @@
 
 [openmind-app](https://github.com/SebastianLavertheDe/openmind-app) 的 Skill 分发仓库。每个顶层目录是一个独立 Skill 包（`cctools.skill.yaml` 清单 + `SKILL.md` 文档），可通过 openmind-app 的 Skill Center 从本仓库的 GitHub URL 安装。
 
+本仓库是外部 GitHub 技能来源。App「探索」页面的应用技能库由 `openmind-app/config/skill-library/` 独立维护，其配置、指令及辅助脚本不放在本仓库。
+
 ## 安装方式
 
 在 openmind-app → 设置 → Skills → 添加来源 → Git，输入本仓库地址：
